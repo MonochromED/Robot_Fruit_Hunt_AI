@@ -51,7 +51,7 @@ var GamePlay = {
 
         if(boardNumber === undefined) {
             if ( typeof default_board_number == 'function' && !isNaN(parseInt(default_board_number()))) {
-                nextBoardNum = default_board_number()
+                nextBoardNum = default_board_number();
             } else {
                 Math.seedrandom();
                 nextBoardNum = Math.min(Math.floor(Math.random() * 999999), 999999);
@@ -86,6 +86,8 @@ var GamePlay = {
         $('#default_direction').val(default_move_direction);//Test output **DEBUG**
         $('#move_to_value').val(move_to);//Test output **DEBUG**
         $('#is_valid_move').val(is_valid_move);//Test output **DEBUG**
+        $('#test_fruit_count').val(test_fruit_count);//Test output **DEBUG**
+        $('#test_fruit_count_direction').val(test_fruit_count_direction);//Test output **DEBUG**
         var ctx = GamePlay.canvas.getContext('2d');
         ctx.clearRect(0,0,GamePlay.canvas.width,GamePlay.canvas.height);
         GamePlay.drawItems(ctx, Board.board, Board.history);

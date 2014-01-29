@@ -8,6 +8,9 @@ var nodes_to_check = new Array();//Contains an array of nodes that have to be ch
 var default_move_direction = NORTH;
 var move_to = -1;
 var is_valid_move = true;
+var test_fruit_count = 0;
+var test_fruit_count_direction = NORTH;
+
 //-----------------------------------------------
 
 //----------AreaFruitDensity object-----------------
@@ -51,7 +54,10 @@ function make_move() {
    mybot_position_val_x = get_my_x();// **DEBUG** Test variable
    mybot_position_val_y = get_my_y();// **DEBUG** Test variable
 
-
+   //-----------TEST SCAN **DEBUG**----Shows value in the direction before mybot moves, but map will show post move---
+   var scan_direction = EAST;//**DEBUG** Test variable
+   test_fruit_count = scanDirection(scan_direction);//**DEBUG** Test variable
+   test_fruit_count_direction = scan_direction;//**DEBUG** Test variable
 
    // we found an item! take it!
    if (board[get_my_x()][get_my_y()] > 0) {
@@ -82,6 +88,7 @@ function make_move() {
    
 }
 
+/*
 //---------------------------OLD FUNCTION--------------------------------------
 //pass in a node with x and y position info
 function consider_move_column_scan(position) {
@@ -108,7 +115,7 @@ function consider_move_column_scan(position) {
    return false;
 }
 //------------------------------OLD FUNCTION END------------------------------------
-
+*/
 
 
 //Check the surrounding blocks to bot.  Begin at 1 move distance.
@@ -123,7 +130,7 @@ function find_move(){
   //In case no blocks have fruit, increase search distance by 1 each cycle
   //while (move_to < 0)
   {
-
+    //Place radial scan algorithm here.  Phase 1 will just home in on nearest. Phase 2 will add in density valuation.
   }
 
 
@@ -187,7 +194,7 @@ function getNewDefaultDirection(){
   else if (rand < 2) default_move_direction = SOUTH;
   else if (rand < 3) default_move_direction = EAST;
   else if (rand < 4) default_move_direction = WEST;
-  
+
   return default_move_direction;
 
 }
@@ -224,7 +231,7 @@ function checkNESW(x,y){
   return -1;
 }
 
-function consider_move_valid(x,y){
+function considerMoveValid(x,y){
   if (!isValidMove(x, y)) return false;
   if (nodes_checked[x][y] > 0) return false;
   nodes_checked[x][y] = 1;
@@ -251,6 +258,81 @@ function scan_fruit_density(radius, coordinate_x, coordinate_y){
 //Update area fruit density listing
 //Updates the list of fruit density by running the 'scan_fruit_density' function for
 //each grid location.  
+
+
+
+//----------------Directional Scan for fruit quantity------------------------
+//Inputs the direction of the scan NORTH, EAST, SOUTH, WEST relative to 
+//the position of the player bot.
+function scanDirection(direction_of_scan){
+
+  
+  mybot_position_val_x = get_my_x();// **DEBUG** Test variable
+  mybot_position_val_y = get_my_y();// **DEBUG** Test variable
+
+  //searches row in front of player by specified direction.  Progresses row by row scanning
+  //for fruit.
+  
+
+  var board = get_board();
+  var fruit_count = 0;
+
+  if (direction_of_scan == NORTH){
+    for (j = (mybot_position_val_y-1); j >= 0 ; j--){
+      for (i = 0; i < WIDTH ; i++)
+      {
+        if (board[i][j]){
+          fruit_count++;
+        }
+      }
+    }
+  }
+
+  if (direction_of_scan == EAST){
+    for (i = (mybot_position_val_x+1); i < WIDTH ; i++){
+      for (j = 0; j < HEIGHT ; j++)
+      {
+        if (board[i][j]){
+          fruit_count++;
+        }
+      }
+    }
+  }
+
+  if (direction_of_scan == SOUTH){
+    for (j = (mybot_position_val_y+1); j < HEIGHT ; j++){
+      for (i = 0; i < WIDTH ; i++)
+      {
+        if (board[i][j]){
+          fruit_count++;
+        }
+      }
+    }
+  }
+
+  if (direction_of_scan == WEST){
+    for (i = (mybot_position_val_x-1); i >= 0 ; i--){
+      for (j = 0; j < WIDTH ; j++)
+      {
+        if (board[i][j]){
+          fruit_count++;
+        }
+      }
+    }
+  }
+  return fruit_count;
+
+
+  
+}
+//
+
+
+
+
+
+
+
 
 
 

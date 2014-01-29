@@ -4,6 +4,42 @@
 		"selected_items":
 		[
 			[
+				"my",
+				"mybot_position_val_x"
+			],
+			[
+				"Wi",
+				"WIDTH"
+			],
+			[
+				"test",
+				"test_fruit_count_direction"
+			],
+			[
+				"row",
+				"row_position"
+			],
+			[
+				"mybot",
+				"mybot_position_val_x"
+			],
+			[
+				"number",
+				"number_of_fruits_in_direction"
+			],
+			[
+				"function",
+				"function"
+			],
+			[
+				"default",
+				"default_move_direction"
+			],
+			[
+				"defau",
+				"default_move_direction"
+			],
+			[
 				"y",
 				"y"
 			],
@@ -131,7 +167,7 @@
 			"file": "mybot.js",
 			"settings":
 			{
-				"buffer_size": 5485,
+				"buffer_size": 9243,
 				"line_ending": "Unix"
 			}
 		},
@@ -139,7 +175,7 @@
 			"file": "assets/js/player.js",
 			"settings":
 			{
-				"buffer_size": 8105,
+				"buffer_size": 8500,
 				"line_ending": "Unix"
 			}
 		},
@@ -163,7 +199,7 @@
 			"file": "game.html",
 			"settings":
 			{
-				"buffer_size": 1519,
+				"buffer_size": 1943,
 				"line_ending": "Unix"
 			}
 		}
@@ -315,6 +351,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"test_fruit_count",
+			"board",
+			"my_x",
+			"consider_move_valid",
+			"default_move_direction",
+			"move_to",
+			"WEST",
 			"fin_move",
 			"position_val",
 			"player_position",
@@ -435,14 +478,7 @@
 			"min-width",
 			"footer",
 			"min-width",
-			"#header",
-			"header",
-			"footer",
-			"main",
-			"navigation_ele",
-			"footer",
-			"slogan",
-			"navigation"
+			"#header"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -475,8 +511,8 @@
 						"selection":
 						[
 							[
-								10022,
-								10017
+								9411,
+								9389
 							]
 						],
 						"settings":
@@ -575,7 +611,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2790.0,
+						"translation.y": 3465.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -592,8 +628,8 @@
 						"selection":
 						[
 							[
-								624,
-								624
+								623,
+								623
 							]
 						],
 						"settings":
@@ -702,15 +738,15 @@
 					"file": "mybot.js",
 					"settings":
 					{
-						"buffer_size": 5485,
+						"buffer_size": 9243,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1445,
-								1445
+								2560,
+								2560
 							]
 						],
 						"settings":
@@ -809,7 +845,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -819,15 +855,15 @@
 					"file": "assets/js/player.js",
 					"settings":
 					{
-						"buffer_size": 8105,
+						"buffer_size": 8500,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5305,
-								5305
+								4233,
+								4233
 							]
 						],
 						"settings":
@@ -926,7 +962,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 990.0,
+						"translation.y": 708.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1043,7 +1079,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 225.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1170,15 +1206,15 @@
 					"file": "game.html",
 					"settings":
 					{
-						"buffer_size": 1519,
+						"buffer_size": 1943,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1519,
-								1519
+								1656,
+								1656
 							]
 						],
 						"settings":
