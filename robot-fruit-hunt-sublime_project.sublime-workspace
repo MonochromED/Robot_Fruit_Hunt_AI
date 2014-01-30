@@ -4,6 +4,66 @@
 		"selected_items":
 		[
 			[
+				"distace",
+				"distance_to_player"
+			],
+			[
+				"player",
+				"player_distance_to_this_node"
+			],
+			[
+				"nearest_",
+				"nearest_fruit_listing_element"
+			],
+			[
+				"neare",
+				"nearest_fruit_listing"
+			],
+			[
+				"check",
+				"check_position_y"
+			],
+			[
+				"check_posit",
+				"check_position_x"
+			],
+			[
+				"check_positio",
+				"check_position_y"
+			],
+			[
+				"calcu",
+				"calculateDistanceAtoB"
+			],
+			[
+				"distance",
+				"distanceAtoB"
+			],
+			[
+				"ch",
+				"check_position_y"
+			],
+			[
+				"chec",
+				"check_position_y"
+			],
+			[
+				"distanc",
+				"ring_distance"
+			],
+			[
+				"coor",
+				"coordinate_x"
+			],
+			[
+				"coordi",
+				"coordinate_y"
+			],
+			[
+				"coo",
+				"coordinate_y"
+			],
+			[
 				"my",
 				"mybot_position_val_x"
 			],
@@ -167,7 +227,7 @@
 			"file": "mybot.js",
 			"settings":
 			{
-				"buffer_size": 9243,
+				"buffer_size": 17039,
 				"line_ending": "Unix"
 			}
 		},
@@ -175,7 +235,7 @@
 			"file": "assets/js/player.js",
 			"settings":
 			{
-				"buffer_size": 8500,
+				"buffer_size": 8575,
 				"line_ending": "Unix"
 			}
 		},
@@ -199,7 +259,7 @@
 			"file": "game.html",
 			"settings":
 			{
-				"buffer_size": 1943,
+				"buffer_size": 2024,
 				"line_ending": "Unix"
 			}
 		}
@@ -260,6 +320,7 @@
 	},
 	"file_history":
 	[
+		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/game.html",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/player.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/mybot.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/jquery.min.js",
@@ -351,6 +412,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"test_node",
+			"ring_scan",
+			"move",
+			"move_distance",
+			"isValidMove",
 			"test_fruit_count",
 			"board",
 			"my_x",
@@ -473,12 +539,7 @@
 			"header",
 			"form",
 			"112233",
-			"float",
-			"footer",
-			"min-width",
-			"footer",
-			"min-width",
-			"#header"
+			"float"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -738,15 +799,15 @@
 					"file": "mybot.js",
 					"settings":
 					{
-						"buffer_size": 9243,
+						"buffer_size": 17039,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2560,
-								2560
+								11390,
+								11390
 							]
 						],
 						"settings":
@@ -845,7 +906,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 360.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -855,15 +916,15 @@
 					"file": "assets/js/player.js",
 					"settings":
 					{
-						"buffer_size": 8500,
+						"buffer_size": 8575,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4233,
-								4233
+								4367,
+								4367
 							]
 						],
 						"settings":
@@ -979,8 +1040,8 @@
 						"selection":
 						[
 							[
-								1077,
-								1077
+								1361,
+								1361
 							]
 						],
 						"settings":
@@ -1079,7 +1140,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 225.0,
+						"translation.y": 1080.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1206,15 +1267,15 @@
 					"file": "game.html",
 					"settings":
 					{
-						"buffer_size": 1943,
+						"buffer_size": 2024,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1656,
-								1656
+								1949,
+								1949
 							]
 						],
 						"settings":

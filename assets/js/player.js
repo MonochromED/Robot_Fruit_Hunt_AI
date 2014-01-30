@@ -88,6 +88,7 @@ var GamePlay = {
         $('#is_valid_move').val(is_valid_move);//Test output **DEBUG**
         $('#test_fruit_count').val(test_fruit_count);//Test output **DEBUG**
         $('#test_fruit_count_direction').val(test_fruit_count_direction);//Test output **DEBUG**
+        $('#test_text_field').val(test_text_field);//Test output **DEBUG**
         var ctx = GamePlay.canvas.getContext('2d');
         ctx.clearRect(0,0,GamePlay.canvas.width,GamePlay.canvas.height);
         GamePlay.drawItems(ctx, Board.board, Board.history);

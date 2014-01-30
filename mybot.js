@@ -1,3 +1,7 @@
+//Test seed: 785282
+//Currently working on the ring_scan() method.
+
+
 //---Global Variables-----------
 var mybot_position_val_x = 1;//Test variable **DEBUG**
 var mybot_position_val_y = 1;//Test variable **DEBUG**
@@ -10,6 +14,8 @@ var move_to = -1;
 var is_valid_move = true;
 var test_fruit_count = 0;
 var test_fruit_count_direction = NORTH;
+var nearest_fruit_listing = new Array();//Contains an array of all the nearest fruit by number of moves.
+var test_text_field = "none";//Text field used for testing output.
 
 //-----------------------------------------------
 
@@ -27,11 +33,11 @@ var test_fruit_count_direction = NORTH;
 //we want to home in on the higher fruit density areas when this is triggered.
 
 
-//----Node Object-----
-function node(x, y, move) {
+//----NodeDistObj Object-----
+function nodeDistObj(x, y, distance_to_player) {
     this.x = x;
     this.y = y;
-    this.move = move;
+    this.player_distance_to_this_node = distance_to_player;//This is measured in moves horizontal and vertical.
 }
 //-------------------
 function new_game() {
@@ -46,32 +52,46 @@ function new_game() {
 //collect those fruit along the way.
 
 function make_move() {
-   var board = get_board();
+  var board = get_board();
 
-   //Get information
-   var my_x = get_my_x();
-   var my_y = get_my_y();
-   mybot_position_val_x = get_my_x();// **DEBUG** Test variable
-   mybot_position_val_y = get_my_y();// **DEBUG** Test variable
+  //Get information
+  var my_x = get_my_x();
+  var my_y = get_my_y();
+  mybot_position_val_x = get_my_x();// **DEBUG** Test variable
+  mybot_position_val_y = get_my_y();// **DEBUG** Test variable
 
-   //-----------TEST SCAN **DEBUG**----Shows value in the direction before mybot moves, but map will show post move---
-   var scan_direction = EAST;//**DEBUG** Test variable
-   test_fruit_count = scanDirection(scan_direction);//**DEBUG** Test variable
-   test_fruit_count_direction = scan_direction;//**DEBUG** Test variable
+  //-----------TEST SCAN **DEBUG**----Shows value in the direction before mybot moves, but map will show post move---
+  var scan_direction = EAST;//**DEBUG** Test variable
+  test_fruit_count = scanDirection(scan_direction);//**DEBUG** Test variable
+  test_fruit_count_direction = scan_direction;//**DEBUG** Test variable
 
-   // we found an item! take it!
-   if (board[get_my_x()][get_my_y()] > 0) {
-       return TAKE;
-   }
-   else if (board[get_my_x()][get_my_y()] <= 0){
-      var move = find_move();
 
-      //Issue which direction to move
-      if (move !== null)
-        return move;
-      else
-        return PASS;
-   }
+  test_text_field = ring_scan(1,1,1);
+  /*
+  ring_scan(3, my_x, my_y);//**Test ring scan for detection
+  //Retrieve from list of nearest fruit if list is populated.  This list should be sorted, so element on top is nearest
+  if (nearest_fruit_listing.length !== 0){
+  nearest_fruit_listing_element = nearest_fruit_listing.pop();//check 1st entry is contains node
+  test_text_field = nearest_fruit_listing_element.player_distance_to_this_node;
+  }
+  */
+
+   //---------------END TEST AREA---------------------------------------------------------------------
+
+
+  // we found an item! take it!
+  if (board[get_my_x()][get_my_y()] > 0) {
+     return TAKE;
+  }
+  else if (board[get_my_x()][get_my_y()] <= 0){
+    var move = find_move();
+
+    //Issue which direction to move
+    if (move !== null)
+      return move;
+    else
+      return PASS;
+  }
 
    //return SimpleBot.findMove(new node(get_opponent_x(), get_opponent_y(), -1));
    
@@ -83,9 +103,7 @@ function make_move() {
    //if (rand < 1) return NORTH;
    //if (rand < 2) return SOUTH;
    //if (rand < 3) return EAST;
-   //if (rand < 4) return WEST;
-
-   
+   //if (rand < 4) return WEST;  
 }
 
 /*
@@ -139,6 +157,7 @@ function find_move(){
   //Move bot in case no moves decided.  
   //Check for block valid, else move to next choice.
   
+  //----------DEFAULT MOVE DIRECTION PICKER--------------------------
   //Default moves if no decision made
   //If move in that direction cannot be moved to, changes the default
   //move direction.
@@ -258,7 +277,136 @@ function scan_fruit_density(radius, coordinate_x, coordinate_y){
 //Update area fruit density listing
 //Updates the list of fruit density by running the 'scan_fruit_density' function for
 //each grid location.  
+//-----------------------------------------------------------------------------------------------------
 
+//-------------------Ring Scan for Nearest Fruit-------------------------------------------
+//Will scan a ring area from the center.  Diagonals are included.  Thus a 1 distance will
+//count in the diagonal position, which will take a move distance of 2.  Since all positions
+//will have a move distance associated with them, we will still be able to sort out which object is closest.
+//We will begin by picking the 12 o clock position, and check clockwise around the ring.
+function ring_scan(distance_from_center_to_north_position, coordinate_x, coordinate_y){
+  var move_distance = 0;
+  var my_x = coordinate_x;
+  var my_y = coordinate_y;
+  var ring_distance = distance_from_center_to_north_position;
+  var board = get_board();//Board data.
+  //Determine the move distance
+
+  //Determine max North, East, South, West positions possible using the straight distance limit if we generated
+  //a radius from the center to the cardinal directions and diagonals with the specified distance.  These boundaries
+  //would be my_position - distance, and my_position + distance for the x and y coordinates.  Both x and y values can
+  //be set to the min or max simultaneously.  
+  // x x x
+  // x p x
+  // x x x
+  //Scan ring looks like above around the player at 1 distance.  8 blocks to scan.  At 2 distance, would be the full 
+  //ring, and be a 5x5 grid minus the center.  Excluding the 1 distance ring, the second ring will be 16 blocks to scan.
+
+  //Begins at 12 o clock position.
+  var beginning_position_x = my_x;
+  var beginning_position_y = my_y - ring_distance;
+
+  //Place the initial checking position at the 12 o clock position
+  //these variables store where our current checking position occurs on our scan ring.
+  var check_position_x = beginning_position_x;
+  var check_position_y = beginning_position_y;
+
+
+  //**************MAKE THIS INTO OWN CHECKING METHOD**********************
+  //Check this position for validity, and if valid, check for fruit 
+  //and its distance from the specified location if fruit exists at that location, else skip to next position.
+  if (isValidMove(check_position_x , check_position_y)){
+    if (has_item(board[check_position_x][check_position_y])){
+      
+      //Calculates distance from one position to another position
+      move_distance = calculateDistanceAtoB(my_x , my_y , check_position_x , check_position_y);
+
+      //Create a node with position and move distance to reach.  Add this to the list
+      nearest_fruit_listing.push(new nodeDistObj(check_position_x, check_position_y, move_distance));
+
+    }
+  }
+  //************************************************************************
+
+  //*************%%%%%%%%%%%%%%%%%%%%%%******************CONTINUE CODING AT THIS STEP*****************************
+  //Call up the 'find_next_ring_position' method to get our next position.
+  //update the 'check_position_x' and 'check_position_y' variables
+  //run the check to see if any item is on that current board location.  That method/or code block will
+  //push an valid nodes onto the nearest_fruit_listing array.
+
+  //Check that if position current === start northern position, we break the ring scan loop.
+
+
+  return find_next_ring_position(1,1,1);//**DEBUG** change this to return true if this method completed.
+}
+
+//Checks on other locations within same ring.
+//Advance position clockwise
+//If x hits max (the rightmost position), then leave x alone and begin on increasing y.
+//Once y hits max, leave y the same and reduce x.  When x is at a minimum, decrease y.
+//Once y is at a minimum, increment x up until the 'check_position_x' value is the
+//same as 'my_x'.
+function find_next_ring_position(ring_distance_input, current_position_x_input, current_position_y_input){
+  var my_x = get_my_x();
+  var my_y = get_my_y();
+  var my_position_node = new node(my_x, my_y, "ringnode");
+  var ring_distance = ring_distance_input;
+
+  //Determine maximum bound North, South, East, and West
+  var northern_side_y = my_y - ring_distance;
+  var southern_side_y = my_y + ring_distance;
+  var eastern_side_x = my_x + ring_distance;
+  var western_side_x = my_x - ring_distance;
+
+  //Determine 4 corner pivot positions where advancement direction changes.
+  var corner_north_east = new node(my_x + ring_distance, my_y - ring_distance, "ringnode");
+  var corner_south_east = new node(my_x + ring_distance, my_y + ring_distance, "ringnode");
+  var corner_south_west = new node(my_x - ring_distance, my_y + ring_distance, "ringnode");
+  var corner_north_west = new node(my_x - ring_distance, my_y - ring_distance, "ringnode");
+
+  //Determine which of the 4 advancement schemes apply.
+  //Since we only process clockwise, we can determine that if we are on a corner, we must
+  //continue the clockwise pattern.  Additionally, if we know which side of the square we are on
+  //we can determine the direction to advance.
+
+  var next_x_position = null;
+  var next_y_position = null;
+
+  //We determine movement based on which side the current position is on and check next condition of we are on the turning corner.
+  //Move East
+  //moves east if current_position_y === northern_side_y && (my_position_node x and y != corner_north_east node x and y)
+  //Assign 'next_x_position' and 'next_y_position'.
+  //Move South
+  //moves south if current_position_x === eastern_side_x && (my_position_node x and y != corner_south_east node x and y)
+  //Assign 'next_x_position' and 'next_y_position'.
+  //Move West
+  //moves west if current_position_y === southern_side_y && (my_position_node x and y != corner_south_west node x and y)
+  //Assign 'next_x_position' and 'next_y_position'.
+  //Move North
+  //moves north if current_position_x === western_side_x && (my_position_node x and y != corner_north_west node x and y)
+  //Assign 'next_x_position' and 'next_y_position'.
+
+ 
+  //Advances position by determined advancement scheme and returning that node containing x, and y position.
+  //var next_position = new node(next_x_position, next_y_position, "ringnode");
+  var next_position = "need to finish find_next_ring_position method";
+  return next_position;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------------
 
 
 //----------------Directional Scan for fruit quantity------------------------
@@ -281,7 +429,7 @@ function scanDirection(direction_of_scan){
     for (j = (mybot_position_val_y-1); j >= 0 ; j--){
       for (i = 0; i < WIDTH ; i++)
       {
-        if (board[i][j]){
+        if (has_item(board[i][j])){
           fruit_count++;
         }
       }
@@ -292,7 +440,7 @@ function scanDirection(direction_of_scan){
     for (i = (mybot_position_val_x+1); i < WIDTH ; i++){
       for (j = 0; j < HEIGHT ; j++)
       {
-        if (board[i][j]){
+        if (has_item(board[i][j])){
           fruit_count++;
         }
       }
@@ -303,7 +451,7 @@ function scanDirection(direction_of_scan){
     for (j = (mybot_position_val_y+1); j < HEIGHT ; j++){
       for (i = 0; i < WIDTH ; i++)
       {
-        if (board[i][j]){
+        if (has_item(board[i][j])){
           fruit_count++;
         }
       }
@@ -314,7 +462,7 @@ function scanDirection(direction_of_scan){
     for (i = (mybot_position_val_x-1); i >= 0 ; i--){
       for (j = 0; j < WIDTH ; j++)
       {
-        if (board[i][j]){
+        if (has_item(board[i][j])){
           fruit_count++;
         }
       }
@@ -325,7 +473,21 @@ function scanDirection(direction_of_scan){
 
   
 }
-//
+//---------Calculates Distance from one position to another----------------
+function calculateDistanceAtoB(positionA_x , positionA_y , positionB_x , positionB_y){
+  var distanceAtoB = 0;
+  var x_axis_distance = 0;
+  var y_axis_distance = 0;
+
+  x_axis_distance = Math.abs(positionA_x - positionB_x);
+  y_axis_distance = Math.abs(positionA_y - positionB_y);
+
+  distanceAtoB = x_axis_distance + y_axis_distance;
+
+  return distanceAtoB;
+}
+
+//-------------------------------------------------------------------------
 
 
 
