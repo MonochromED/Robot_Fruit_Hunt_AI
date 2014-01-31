@@ -4,6 +4,138 @@
 		"selected_items":
 		[
 			[
+				"get_my",
+				"get_my_x"
+			],
+			[
+				"scan",
+				"scan_block_area"
+			],
+			[
+				"sort",
+				"sort_nearest_fruit_listing"
+			],
+			[
+				"text",
+				"test_text_field"
+			],
+			[
+				"test",
+				"test_text_field"
+			],
+			[
+				"chec",
+				"check_position_y"
+			],
+			[
+				"check_",
+				"check_position_x"
+			],
+			[
+				"check",
+				"check_position_for_fruit"
+			],
+			[
+				"error",
+				"error_message_field"
+			],
+			[
+				"begi",
+				"beginning_position_y"
+			],
+			[
+				"current",
+				"current_position_within_ring_bounds"
+			],
+			[
+				"south",
+				"southern_side_y"
+			],
+			[
+				"north",
+				"northern_side_y"
+			],
+			[
+				"eas",
+				"eastern_side_x"
+			],
+			[
+				"location",
+				"location_is_within_bounds"
+			],
+			[
+				"boundar",
+				"boundary_y_max"
+			],
+			[
+				"next_p",
+				"next_position_x"
+			],
+			[
+				"curren",
+				"current_position_y"
+			],
+			[
+				"next_",
+				"next_position_y"
+			],
+			[
+				"loop",
+				"looped_ring_once"
+			],
+			[
+				"loo",
+				"looped_ring_once"
+			],
+			[
+				"be",
+				"beginning_position_y"
+			],
+			[
+				"tex",
+				"test_text_field"
+			],
+			[
+				"fruits",
+				"nearest_fruit_listing"
+			],
+			[
+				"nearest",
+				"nearest_fruit_listing"
+			],
+			[
+				"test_",
+				"test_text_field"
+			],
+			[
+				"check_p",
+				"check_position_for_fruit"
+			],
+			[
+				"curre",
+				"current_position_y"
+			],
+			[
+				"begin",
+				"beginning_position_x"
+			],
+			[
+				"current_",
+				"current_position_x"
+			],
+			[
+				"my_position",
+				"my_position_node"
+			],
+			[
+				"current_posi",
+				"current_position_y"
+			],
+			[
+				"curr",
+				"current_position_y_input"
+			],
+			[
 				"distace",
 				"distance_to_player"
 			],
@@ -18,10 +150,6 @@
 			[
 				"neare",
 				"nearest_fruit_listing"
-			],
-			[
-				"check",
-				"check_position_y"
 			],
 			[
 				"check_posit",
@@ -41,10 +169,6 @@
 			],
 			[
 				"ch",
-				"check_position_y"
-			],
-			[
-				"chec",
 				"check_position_y"
 			],
 			[
@@ -70,10 +194,6 @@
 			[
 				"Wi",
 				"WIDTH"
-			],
-			[
-				"test",
-				"test_fruit_count_direction"
 			],
 			[
 				"row",
@@ -227,7 +347,7 @@
 			"file": "mybot.js",
 			"settings":
 			{
-				"buffer_size": 17039,
+				"buffer_size": 22134,
 				"line_ending": "Unix"
 			}
 		},
@@ -235,7 +355,7 @@
 			"file": "assets/js/player.js",
 			"settings":
 			{
-				"buffer_size": 8575,
+				"buffer_size": 8658,
 				"line_ending": "Unix"
 			}
 		},
@@ -259,7 +379,7 @@
 			"file": "game.html",
 			"settings":
 			{
-				"buffer_size": 2024,
+				"buffer_size": 2106,
 				"line_ending": "Unix"
 			}
 		}
@@ -320,6 +440,7 @@
 	},
 	"file_history":
 	[
+		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/grid.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/game.html",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/player.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/mybot.js",
@@ -398,7 +519,7 @@
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 36.0
 	},
 	"find_in_files":
 	{
@@ -412,6 +533,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"find_next_ring",
+			"check_position_for_fruit",
+			"isValidMove",
+			"get_board",
+			"isvalid",
+			"is_valid_move",
+			"nearest_fruit_listing",
+			".length = 0;",
+			"test_text_field",
+			"check",
+			"ring_scan",
+			"find_next_ring",
+			"while",
+			"pop()",
 			"test_node",
 			"ring_scan",
 			"move",
@@ -525,21 +660,7 @@
 			"search",
 			"transparent",
 			"color:",
-			"transparent",
-			"searc",
-			"main",
-			"h",
-			"h1",
-			"112233",
-			"{\n",
-			"main",
-			"112233",
-			"	\n",
-			"112233",
-			"header",
-			"form",
-			"112233",
-			"float"
+			"transparent"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -672,7 +793,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3465.0,
+						"translation.y": 3234.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -689,8 +810,8 @@
 						"selection":
 						[
 							[
-								623,
-								623
+								624,
+								624
 							]
 						],
 						"settings":
@@ -799,15 +920,15 @@
 					"file": "mybot.js",
 					"settings":
 					{
-						"buffer_size": 17039,
+						"buffer_size": 22134,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11390,
-								11390
+								94,
+								94
 							]
 						],
 						"settings":
@@ -916,15 +1037,15 @@
 					"file": "assets/js/player.js",
 					"settings":
 					{
-						"buffer_size": 8575,
+						"buffer_size": 8658,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4367,
-								4367
+								4426,
+								4401
 							]
 						],
 						"settings":
@@ -1023,7 +1144,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 708.0,
+						"translation.y": 661.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1140,7 +1261,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1080.0,
+						"translation.y": 210.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1257,7 +1378,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3960.0,
+						"translation.y": 3696.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1267,15 +1388,15 @@
 					"file": "game.html",
 					"settings":
 					{
-						"buffer_size": 2024,
+						"buffer_size": 2106,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1949,
-								1949
+								2079,
+								2079
 							]
 						],
 						"settings":
@@ -1426,12 +1547,16 @@
 		"selected_items":
 		[
 			[
-				"level",
-				"test_proj/bubble_pop_game/level_board.rb"
+				"",
+				"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/mybot.js"
 			],
 			[
-				"",
-				"3.0'"
+				"my",
+				"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/mybot.js"
+			],
+			[
+				"level",
+				"test_proj/bubble_pop_game/level_board.rb"
 			]
 		],
 		"width": 0.0

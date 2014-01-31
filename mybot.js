@@ -1,6 +1,6 @@
 //Test seed: 785282
 //Ring test seed: 558738
-//Currently working on the ring_scan() method.
+//Currently working on the routing to a location;
 
 
 //---Global Variables-----------
@@ -16,6 +16,7 @@ var is_valid_move = true;
 var test_fruit_count = 0;
 var test_fruit_count_direction = NORTH;
 var nearest_fruit_listing = new Array();//Contains an array of all the nearest fruit by number of moves.
+var go_to_this_location = null;
 var test_text_field = "none";//Text field used for testing output.
 var error_message_field = "none";//Displays error message when error caught in algorithms.
 
@@ -68,9 +69,13 @@ function make_move() {
   test_fruit_count_direction = scan_direction;//**DEBUG** Test variable
 
   
-
-  check_all_ring_position(1, my_x, my_y);
+  scan_block_area(0,WIDTH-1,0,HEIGHT-1);
   test_text_field = nearest_fruit_listing.length;
+
+
+  //check_all_ring_position(1, my_x, my_y);
+  //test_text_field = nearest_fruit_listing.length;
+  //sort_nearest_fruit_listing();
 
   /*
   ring_scan(3, my_x, my_y);//**Test ring scan for detection
@@ -155,6 +160,7 @@ function find_move(){
   {
     //Place radial scan algorithm here.  Phase 1 will just home in on nearest. Phase 2 will add in density valuation.
   }
+
 
 
 
@@ -292,11 +298,11 @@ function scan_fruit_density(radius, coordinate_x, coordinate_y){
 //If none found, expands search radius and repeats.  Clears out the 'nearest_fruit_listing' array
 //each time this is called so that we have a fresh list and remove stale data entries.
 function ring_scan(distance_from_center_to_north_position, central_coordinate_x, central_coordinate_y){
+  nearest_fruit_listing.length = 0; //**DEBUG***CLEAR FRUIT LISTING  
   var move_distance = 0;
   var my_x = central_coordinate_x;
   var my_y = central_coordinate_y;
   var ring_distance = distance_from_center_to_north_position;
-  var board = get_board();//Board data.
 
 
   //Determine max North, East, South, West positions possible using the straight distance limit if we generated
@@ -309,17 +315,7 @@ function ring_scan(distance_from_center_to_north_position, central_coordinate_x,
   //Scan ring looks like above around the player at 1 distance.  8 blocks to scan.  At 2 distance, would be the full 
   //ring, and be a 5x5 grid minus the center.  Excluding the 1 distance ring, the second ring will be 16 blocks to scan.
 
-  //Check all ring positions for fruit.  specify scan radius for the ring.
-
-
-  //*************%%%%%%%%%%%%%%%%%%%%%%******************CONTINUE CODING AT THIS STEP*****************************
-  //Call up the 'find_next_ring_position' method to get our next position.
-  //update the 'check_position_x' and 'check_position_y' variables
-  //run the check to see if any item is on that current board location.  That method/or code block will
-  //push an valid nodes onto the nearest_fruit_listing array.
-
-  //Check that if position current === start northern position, we break the ring scan loop.
-
+  check_all_ring_position(ring_distance, my_x, my_y);
 
   return true;
 }
@@ -355,7 +351,7 @@ function check_all_ring_position(ring_distance_input, my_x_input, my_y_input){
   //Needs to contain the current checking position and needs to advance the position around the ring.
   //At each location that we check for fruit, we invoke the 'check_position_for_fruit' method.
   //When the position returns to the 12 o clock position, we terminate the loop.
-  nearest_fruit_listing.length = 0; //**DEBUG***CLEAR FRUIT LISTING
+
   var my_x = my_x_input;
   var my_y = my_y_input;
   var ring_distance = ring_distance_input;
@@ -378,30 +374,7 @@ function check_all_ring_position(ring_distance_input, my_x_input, my_y_input){
 
 
   //then
- /*-------------BROKEN----
-  //start while loop which runs while looped_ring_once != true;
-  while (looped_ring_once === true){
-    var next_position_node = find_next_ring_position(ring_distance, my_x, my_y, check_position_x, check_position_y);
-    var counter = 0;
-    //update to the next position
-    check_position_x = next_position_node.x;
-    check_position_y = next_position_node.y;
 
-    //Check if block is starting position
-    if (check_position_x == beginning_position_x && check_position_x == beginning_position_y){
-      looped_ring_once = true;
-    }
-    else if (counter == 9){
-      looped_ring_once = true;
-    }
-    else{
-      //Check if block valid, then check for fruit.  Done by the fruit checking method
-      check_position_for_fruit(check_position_x, check_position_y);
-      counter = counter + 1;
-    }
-  }
-  */
-  var counter = 0;
   var next_position_node;
   while (looped_ring_once === false){
     next_position_node = find_next_ring_position(ring_distance, my_x, my_y, check_position_x, check_position_y);
@@ -614,8 +587,45 @@ function calculateDistanceAtoB(positionA_x , positionA_y , positionB_x , positio
 //-------------------------------------------------------------------------
 
 
+//-------------------Sort nearest_fruit_listing ------------------------
+function sort_nearest_fruit_listing(){
+
+  //Sorts in ascending order all fruits listed in the 'nearest_fruit_listing'.
+  temp_array.sort(function(a,b){return a.player_distance_to_this_node-b.player_distance_to_this_node});
+
+  return true;
+
+}
+
+//---------------------------------------------------------------------
+
+//Scan map by specifying bounds and dump all fruits found into the nearest_fruit_listing
+//by using the 'check_position_for_fruit() method.  Clears the 'nearest_fruit_listing' array before new scan.
+function scan_block_area(bound_x_min, bound_x_max, bound_y_min, bound_y_max){
+
+  nearest_fruit_listing.length = 0; //**DEBUG***CLEAR FRUIT LISTING
+  for (var x = bound_x_min ; x <= bound_x_max ; x++)
+    for (var y = bound_y_min ; y <= bound_y_max ; y++){
+      if (isValidMove(x , y)){
+
+        check_position_for_fruit(x,y);
+      }
+    }
+  return true;
+}
+
+//**************WORKING ON THIS PART*************************
+//Route bot to nearest fruit stored in go_to_location
+function route_bot_to_go_to_location(position_x, position_y){
+  //determine current location of bot
+  my_x = get_my_x();
+  my_y = get_my_y();
+
+  //bot takes zig-zag path when needing to go digonal.  Prefers to
+  //decrease the largest delta for x and y first.  
 
 
+}
 
 
 
