@@ -1,4 +1,5 @@
 //Test seed: 785282
+//Ring test seed: 558738
 //Currently working on the ring_scan() method.
 
 
@@ -16,6 +17,7 @@ var test_fruit_count = 0;
 var test_fruit_count_direction = NORTH;
 var nearest_fruit_listing = new Array();//Contains an array of all the nearest fruit by number of moves.
 var test_text_field = "none";//Text field used for testing output.
+var error_message_field = "none";//Displays error message when error caught in algorithms.
 
 //-----------------------------------------------
 
@@ -65,8 +67,11 @@ function make_move() {
   test_fruit_count = scanDirection(scan_direction);//**DEBUG** Test variable
   test_fruit_count_direction = scan_direction;//**DEBUG** Test variable
 
+  
 
-  test_text_field = ring_scan(1,1,1);
+  check_all_ring_position(1, my_x, my_y);
+  test_text_field = nearest_fruit_listing.length;
+
   /*
   ring_scan(3, my_x, my_y);//**Test ring scan for detection
   //Retrieve from list of nearest fruit if list is populated.  This list should be sorted, so element on top is nearest
@@ -284,13 +289,15 @@ function scan_fruit_density(radius, coordinate_x, coordinate_y){
 //count in the diagonal position, which will take a move distance of 2.  Since all positions
 //will have a move distance associated with them, we will still be able to sort out which object is closest.
 //We will begin by picking the 12 o clock position, and check clockwise around the ring.
-function ring_scan(distance_from_center_to_north_position, coordinate_x, coordinate_y){
+//If none found, expands search radius and repeats.  Clears out the 'nearest_fruit_listing' array
+//each time this is called so that we have a fresh list and remove stale data entries.
+function ring_scan(distance_from_center_to_north_position, central_coordinate_x, central_coordinate_y){
   var move_distance = 0;
-  var my_x = coordinate_x;
-  var my_y = coordinate_y;
+  var my_x = central_coordinate_x;
+  var my_y = central_coordinate_y;
   var ring_distance = distance_from_center_to_north_position;
   var board = get_board();//Board data.
-  //Determine the move distance
+
 
   //Determine max North, East, South, West positions possible using the straight distance limit if we generated
   //a radius from the center to the cardinal directions and diagonals with the specified distance.  These boundaries
@@ -302,31 +309,8 @@ function ring_scan(distance_from_center_to_north_position, coordinate_x, coordin
   //Scan ring looks like above around the player at 1 distance.  8 blocks to scan.  At 2 distance, would be the full 
   //ring, and be a 5x5 grid minus the center.  Excluding the 1 distance ring, the second ring will be 16 blocks to scan.
 
-  //Begins at 12 o clock position.
-  var beginning_position_x = my_x;
-  var beginning_position_y = my_y - ring_distance;
+  //Check all ring positions for fruit.  specify scan radius for the ring.
 
-  //Place the initial checking position at the 12 o clock position
-  //these variables store where our current checking position occurs on our scan ring.
-  var check_position_x = beginning_position_x;
-  var check_position_y = beginning_position_y;
-
-
-  //**************MAKE THIS INTO OWN CHECKING METHOD**********************
-  //Check this position for validity, and if valid, check for fruit 
-  //and its distance from the specified location if fruit exists at that location, else skip to next position.
-  if (isValidMove(check_position_x , check_position_y)){
-    if (has_item(board[check_position_x][check_position_y])){
-      
-      //Calculates distance from one position to another position
-      move_distance = calculateDistanceAtoB(my_x , my_y , check_position_x , check_position_y);
-
-      //Create a node with position and move distance to reach.  Add this to the list
-      nearest_fruit_listing.push(new nodeDistObj(check_position_x, check_position_y, move_distance));
-
-    }
-  }
-  //************************************************************************
 
   //*************%%%%%%%%%%%%%%%%%%%%%%******************CONTINUE CODING AT THIS STEP*****************************
   //Call up the 'find_next_ring_position' method to get our next position.
@@ -337,20 +321,127 @@ function ring_scan(distance_from_center_to_north_position, coordinate_x, coordin
   //Check that if position current === start northern position, we break the ring scan loop.
 
 
-  return find_next_ring_position(1,1,1);//**DEBUG** change this to return true if this method completed.
+  return true;
+}
+
+//Check block for fruit and push to fruit listing if fruit is found on that block
+//which includes the position and distance of player bot to that fruit.
+//Returns 0 if no fruit found or invalid block, returns 1 if fruit found on block.
+function check_position_for_fruit(check_position_x, check_position_y){
+  var move_distance = 0;
+  var my_x = get_my_x();
+  var my_y = get_my_y();
+  var board = get_board();//Board data.
+
+  if (isValidMove(check_position_x , check_position_y)){
+    if (has_item(board[check_position_x][check_position_y])){
+      
+      //Calculates distance from one position to another position
+      move_distance = calculateDistanceAtoB(my_x , my_y , check_position_x , check_position_y);
+
+      //Create a node with position and move distance to reach.  Add this to the list
+      nearest_fruit_listing.push(new nodeDistObj(check_position_x, check_position_y, move_distance));
+      return 1;
+    }
+    else
+      return 0;
+  }
+  else
+    return 0;
+}
+
+//Checks all ring positions for fruit.  Any position with fruit gets added to the 'nearest_fruit_listing' array.
+function check_all_ring_position(ring_distance_input, my_x_input, my_y_input){
+  //Needs to contain the current checking position and needs to advance the position around the ring.
+  //At each location that we check for fruit, we invoke the 'check_position_for_fruit' method.
+  //When the position returns to the 12 o clock position, we terminate the loop.
+  nearest_fruit_listing.length = 0; //**DEBUG***CLEAR FRUIT LISTING
+  var my_x = my_x_input;
+  var my_y = my_y_input;
+  var ring_distance = ring_distance_input;
+  var looped_ring_once = false;
+  var check_position_x = null;
+  var check_position_y = null;
+  //Stores the starting 12 o clock position.
+  var beginning_position_x = my_x;
+  var beginning_position_y = my_y - ring_distance;
+
+  //Make check_position = beginning_position
+  check_position_x = beginning_position_x;
+  check_position_y = beginning_position_y;
+
+  //check the 12 o clock position is valid block
+  if (isValidMove(check_position_x, check_position_y)){
+    //check for fruit and if found push to fruit list
+    check_position_for_fruit(check_position_x, check_position_y);
+  }
+
+
+  //then
+ /*-------------BROKEN----
+  //start while loop which runs while looped_ring_once != true;
+  while (looped_ring_once === true){
+    var next_position_node = find_next_ring_position(ring_distance, my_x, my_y, check_position_x, check_position_y);
+    var counter = 0;
+    //update to the next position
+    check_position_x = next_position_node.x;
+    check_position_y = next_position_node.y;
+
+    //Check if block is starting position
+    if (check_position_x == beginning_position_x && check_position_x == beginning_position_y){
+      looped_ring_once = true;
+    }
+    else if (counter == 9){
+      looped_ring_once = true;
+    }
+    else{
+      //Check if block valid, then check for fruit.  Done by the fruit checking method
+      check_position_for_fruit(check_position_x, check_position_y);
+      counter = counter + 1;
+    }
+  }
+  */
+  var counter = 0;
+  var next_position_node;
+  while (looped_ring_once === false){
+    next_position_node = find_next_ring_position(ring_distance, my_x, my_y, check_position_x, check_position_y);
+    if (next_position_node === null){
+      error_message_field = "unable to find next ring position.";
+      break;
+    }
+    //update to the next position
+    check_position_x = next_position_node.x;
+    check_position_y = next_position_node.y;
+    if (check_position_x == beginning_position_x && check_position_y == beginning_position_y)
+      looped_ring_once = true;
+    //if entire ring not checked yet, check the current position for fruit.
+    else
+      check_position_for_fruit(check_position_x, check_position_y);
+
+  }
+  
+  //begin by advancing to the next position
+  //check if block is 12 o clock position,  if so, mark 'looped_ring_once = true'
+  //check if block is valid
+  //if block is valid, check for fruit
+
+  //once ring positions are all checked, we should have a list of all fruit available within that ring.
+  
+
+
+  return true;
 }
 
 //Checks on other locations within same ring.
-//Advance position clockwise
-//If x hits max (the rightmost position), then leave x alone and begin on increasing y.
-//Once y hits max, leave y the same and reduce x.  When x is at a minimum, decrease y.
-//Once y is at a minimum, increment x up until the 'check_position_x' value is the
-//same as 'my_x'.
-function find_next_ring_position(ring_distance_input, current_position_x_input, current_position_y_input){
-  var my_x = get_my_x();
-  var my_y = get_my_y();
+//Advance position clockwise.  If we hit corner positions, changes the position to follow clockwise pattern.
+function find_next_ring_position(ring_distance_input, my_x_input, my_y_input, current_position_x_input, current_position_y_input){
+  var my_x = my_x_input;
+  var my_y = my_y_input;
   var my_position_node = new node(my_x, my_y, "ringnode");
   var ring_distance = ring_distance_input;
+  var current_position_x = current_position_x_input;
+  var current_position_y = current_position_y_input;
+  var ring_position_node = new node(current_position_x, current_position_y, "ringnode");
 
   //Determine maximum bound North, South, East, and West
   var northern_side_y = my_y - ring_distance;
@@ -359,43 +450,76 @@ function find_next_ring_position(ring_distance_input, current_position_x_input, 
   var western_side_x = my_x - ring_distance;
 
   //Determine 4 corner pivot positions where advancement direction changes.
-  var corner_north_east = new node(my_x + ring_distance, my_y - ring_distance, "ringnode");
-  var corner_south_east = new node(my_x + ring_distance, my_y + ring_distance, "ringnode");
-  var corner_south_west = new node(my_x - ring_distance, my_y + ring_distance, "ringnode");
-  var corner_north_west = new node(my_x - ring_distance, my_y - ring_distance, "ringnode");
+  var corner_north_east = new node(eastern_side_x, northern_side_y, "ringnode");
+  var corner_south_east = new node(eastern_side_x, southern_side_y, "ringnode");
+  var corner_south_west = new node(western_side_x, southern_side_y, "ringnode");
+  var corner_north_west = new node(western_side_x, northern_side_y, "ringnode");
 
   //Determine which of the 4 advancement schemes apply.
   //Since we only process clockwise, we can determine that if we are on a corner, we must
   //continue the clockwise pattern.  Additionally, if we know which side of the square we are on
   //we can determine the direction to advance.
 
-  var next_x_position = null;
-  var next_y_position = null;
+  var next_position_x = null;
+  var next_position_y = null;
 
   //We determine movement based on which side the current position is on and check next condition of we are on the turning corner.
+  //We also check if the location is within map bounds.
+  var current_position_within_ring_bounds = location_is_within_bounds(current_position_x, current_position_y, western_side_x, eastern_side_x,
+    northern_side_y, southern_side_y);
   //Move East
-  //moves east if current_position_y === northern_side_y && (my_position_node x and y != corner_north_east node x and y)
-  //Assign 'next_x_position' and 'next_y_position'.
+  //moves east if current_position_y == northern_side_y && (ring_position_node x and y != corner_north_east node x and y)
+  //Assign 'next_position_x' and 'next_position_y'.
+  if (current_position_y == northern_side_y && ring_position_node.x != eastern_side_x && current_position_within_ring_bounds){
+    next_position_x = current_position_x + 1;
+    next_position_y = current_position_y;
+  }
+    
   //Move South
-  //moves south if current_position_x === eastern_side_x && (my_position_node x and y != corner_south_east node x and y)
-  //Assign 'next_x_position' and 'next_y_position'.
+  //moves south if current_position_x == eastern_side_x && (ring_position_node x and y != corner_south_east node x and y)
+  //Assign 'next_position_x' and 'next_position_y'.
+  else if (current_position_x == eastern_side_x && ring_position_node.y != southern_side_y && current_position_within_ring_bounds ){
+    next_position_x = current_position_x;
+    next_position_y = current_position_y + 1;
+  }
+
   //Move West
-  //moves west if current_position_y === southern_side_y && (my_position_node x and y != corner_south_west node x and y)
-  //Assign 'next_x_position' and 'next_y_position'.
+  //moves west if current_position_y == southern_side_y && (ring_position_node x and y != corner_south_west node x and y)
+  //Assign 'next_position_x' and 'next_position_y'.
+  else if (current_position_y == southern_side_y && ring_position_node.x != western_side_x && current_position_within_ring_bounds ){
+    next_position_x = current_position_x - 1;
+    next_position_y = current_position_y;
+  }
+
   //Move North
-  //moves north if current_position_x === western_side_x && (my_position_node x and y != corner_north_west node x and y)
-  //Assign 'next_x_position' and 'next_y_position'.
+  //moves north if current_position_x == western_side_x && (ring_position_node x and y != corner_north_west node x and y)
+  //Assign 'next_position_x' and 'next_position_y'.
+  else if (current_position_x == western_side_x && ring_position_node.y != northern_side_y && current_position_within_ring_bounds ){
+    next_position_x = current_position_x;
+    next_position_y = current_position_y - 1;
+  }
+  //If input for current position does not match where the expected check locations are
+  //will toss an error message to the position locations.
+    else{
+    next_position_x = "error current ring position not in expected range. Check 'find_next_ring_position' inputs.";
+    next_position_y = "error current ring position not in expected range. Check 'find_next_ring_position' inputs.";
+  }
 
  
   //Advances position by determined advancement scheme and returning that node containing x, and y position.
-  //var next_position = new node(next_x_position, next_y_position, "ringnode");
-  var next_position = "need to finish find_next_ring_position method";
+  var next_position = new node(next_position_x,next_position_y,"ringnode");
   return next_position;
 }
 
 
 
-
+//Check if location is within specified boundaries.
+function location_is_within_bounds(location_x, location_y, boundary_x_min, boundary_x_max, boundary_y_min, boundary_y_max){
+  if (location_x >= boundary_x_min && location_x <= boundary_x_max && location_y >= boundary_y_min && location_y <= boundary_y_max)
+    return true;
+  else
+    return false;
+}
 
 
 
