@@ -1,6 +1,6 @@
 //Test seed: 785282
 //Ring test seed: 558738
-//Currently working on the routing to a location;
+//Currently working on method for 'go_to_this_node_location' global variable;
 
 
 //---Global Variables-----------
@@ -16,7 +16,7 @@ var is_valid_move = true;
 var test_fruit_count = 0;
 var test_fruit_count_direction = NORTH;
 var nearest_fruit_listing = new Array();//Contains an array of all the nearest fruit by number of moves.
-var go_to_this_location = null;
+var go_to_this_node_location = null;
 var test_text_field = "none";//Text field used for testing output.
 var error_message_field = "none";//Displays error message when error caught in algorithms.
 
@@ -69,8 +69,8 @@ function make_move() {
   test_fruit_count_direction = scan_direction;//**DEBUG** Test variable
 
   
-  scan_block_area(0,WIDTH-1,0,HEIGHT-1);
-  test_text_field = nearest_fruit_listing.length;
+
+
 
 
   //check_all_ring_position(1, my_x, my_y);
@@ -117,7 +117,7 @@ function make_move() {
 }
 
 /*
-//---------------------------OLD FUNCTION--------------------------------------
+//---------------------------OLD FUNCTION Column scan--------------------------------------
 //pass in a node with x and y position info
 function consider_move_column_scan(position) {
    //var x_position_coord = 0;
@@ -151,9 +151,22 @@ function find_move(){
   var my_x = get_my_x();
   var my_y = get_my_y();
 
+  //Scan for nearest fruit on map
+  scan_block_area(0,WIDTH-1,0,HEIGHT-1);//Scans entire map
+  //Sorts list for nearest fruit
+  sort_nearest_fruit_listing();
+  //Gets the x and y coordinate of this fruit
+  var go_to_x = nearest_fruit_listing[0].x;
+  var go_to_y = nearest_fruit_listing[0].y;
 
+  //moves bot in direction towards specified location
+  move_to = route_bot_to_go_to_location(go_to_x,go_to_y);
+
+/*
   //Scan NESW blocks for fruit
   move_to = checkNESW(my_x,my_y);
+*/
+
 
   //In case no blocks have fruit, increase search distance by 1 each cycle
   //while (move_to < 0)
@@ -591,7 +604,7 @@ function calculateDistanceAtoB(positionA_x , positionA_y , positionB_x , positio
 function sort_nearest_fruit_listing(){
 
   //Sorts in ascending order all fruits listed in the 'nearest_fruit_listing'.
-  temp_array.sort(function(a,b){return a.player_distance_to_this_node-b.player_distance_to_this_node});
+  nearest_fruit_listing.sort(function(a,b){return a.player_distance_to_this_node-b.player_distance_to_this_node});
 
   return true;
 
@@ -617,18 +630,89 @@ function scan_block_area(bound_x_min, bound_x_max, bound_y_min, bound_y_max){
 //**************WORKING ON THIS PART*************************
 //Route bot to nearest fruit stored in go_to_location
 function route_bot_to_go_to_location(position_x, position_y){
+  var use_x_axis_path = false;
+  var use_y_axis_path = false;
+
   //determine current location of bot
-  my_x = get_my_x();
-  my_y = get_my_y();
+  var my_x = get_my_x();
+  var my_y = get_my_y();
 
   //bot takes zig-zag path when needing to go digonal.  Prefers to
   //decrease the largest delta for x and y first.  
+  var difference_x = my_x - position_x;
+  var difference_y = my_y - position_y;
 
+  //Check if bot is already at that location
+  if (difference_x === 0 && difference_y === 0){
+    error_message_field = "bot already at destination.";
+    return -1;
+  }
+
+  //Determines in which directions the fruit location is relative to the player bot.
+  //Must determine if north, south, east, west or combination of 2.
+  var location_west_of_mybot = false;
+  var location_east_of_mybot = false;
+  var location_north_of_mybot = false;
+  var location_south_of_mybot = false;
+
+  if (difference_x > 0) location_west_of_mybot = true;
+  else if (difference_x < 0) location_east_of_mybot = true;
+
+  if (difference_y > 0) location_north_of_mybot = true;
+  else if (difference_y < 0) location_south_of_mybot = true;
+
+
+
+  //Determine to move along x axis or y axis first.
+  //Prefer the axis with larger delta between positions.
+  var magnitude_difference_x = Math.abs(difference_x);
+  var magnitude_difference_y = Math.abs(difference_y);
+  if ( magnitude_difference_x > magnitude_difference_y){
+    use_x_axis_path = true;
+  }
+  else if (magnitude_difference_x < magnitude_difference_y){
+    use_y_axis_path = true;
+  }
+
+  else{
+    //pick at random x or y to move along when both are equal in magnitude.
+    var rand = Math.random() * 2;
+    if (rand < 1) use_x_axis_path = true;
+    else if (rand < 2) use_y_axis_path = true;
+  }
+
+  //Select move direction using x and y axis preference.  Will always give an x and a y
+  //move direction unless we are lined up with the target location or on the target location.
+  //If lined up, only 1 available move choice, which will be reflected in both the relative position
+  //as well as the x or y axis picker.
+  if (use_x_axis_path){
+    if (location_west_of_mybot) return WEST;
+    else if (location_east_of_mybot) return EAST;
+    else{
+      error_message_field = "bot routing error. EAST or WEST could not be picked in route_bot_to_go_to_location method.";
+      return -1;
+    }
+      
+  }
+  else if (use_y_axis_path){
+    if (location_north_of_mybot) return NORTH;
+    else if (location_south_of_mybot) return SOUTH;
+    else{
+      error_message_field = "Bot routing error. NORTH or SOUTH could not be picked in route_bot_to_go_to_location method.";
+      return -1;
+    }
+  }
+  else{
+    error_message_field = "bot routing error. No x and y axis path picked in route_bot_to_go_to_location method.";
+    return -1;
+  }
 
 }
 
+//Checks if the bot has arrived at the go_to_this_node_location location
+function has_arrive_at_move_to_location(){
 
-
+}
 
 
 
