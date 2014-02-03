@@ -4,6 +4,94 @@
 		"selected_items":
 		[
 			[
+				"directio",
+				"direction_sorting_array"
+			],
+			[
+				"direct",
+				"direction_sorting_array"
+			],
+			[
+				"fruits",
+				"fruits_to_north"
+			],
+			[
+				"direction",
+				"directionSortingArray"
+			],
+			[
+				"frui",
+				"fruits_to_east"
+			],
+			[
+				"fruits_to",
+				"fruits_to_north"
+			],
+			[
+				"my_position",
+				"my_position_x"
+			],
+			[
+				"has_item_to_west",
+				"has_item_to_west"
+			],
+			[
+				"has_item",
+				"has_item_to_west"
+			],
+			[
+				"has",
+				"has_item_to_south"
+			],
+			[
+				"item",
+				"has_item_to_north"
+			],
+			[
+				"my",
+				"my_position_x"
+			],
+			[
+				"output",
+				"outputDirectionsContainer"
+			],
+			[
+				"item_to_",
+				"has_item_to_east"
+			],
+			[
+				"my_posi",
+				"my_position_y"
+			],
+			[
+				"num",
+				"num_adjacent_fruit_to_position"
+			],
+			[
+				"get",
+				"get_board"
+			],
+			[
+				"does",
+				"does_position_have_fruit"
+			],
+			[
+				"check_p",
+				"check_position_y"
+			],
+			[
+				"check_position",
+				"check_position_x"
+			],
+			[
+				"location_s",
+				"location_south_of_mybot"
+			],
+			[
+				"differe",
+				"difference_x"
+			],
+			[
 				"get_my",
 				"get_my_x"
 			],
@@ -96,20 +184,12 @@
 				"test_text_field"
 			],
 			[
-				"fruits",
-				"nearest_fruit_listing"
-			],
-			[
 				"nearest",
 				"nearest_fruit_listing"
 			],
 			[
 				"test_",
 				"test_text_field"
-			],
-			[
-				"check_p",
-				"check_position_for_fruit"
 			],
 			[
 				"curre",
@@ -122,10 +202,6 @@
 			[
 				"current_",
 				"current_position_x"
-			],
-			[
-				"my_position",
-				"my_position_node"
 			],
 			[
 				"current_posi",
@@ -186,10 +262,6 @@
 			[
 				"coo",
 				"coordinate_y"
-			],
-			[
-				"my",
-				"mybot_position_val_x"
 			],
 			[
 				"Wi",
@@ -347,7 +419,7 @@
 			"file": "mybot.js",
 			"settings":
 			{
-				"buffer_size": 22134,
+				"buffer_size": 31799,
 				"line_ending": "Unix"
 			}
 		},
@@ -533,6 +605,29 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"won",
+			"PASS",
+			"pass",
+			"directionSortingArray",
+			"sort",
+			"direction",
+			"scan",
+			"contains_fruit",
+			"has_fruit",
+			"has_item",
+			"check_position_for_fruit_and_add",
+			"check_position_for",
+			"check_positio",
+			"check_position",
+			"check",
+			"check_positio",
+			"check_position",
+			"check_position_for",
+			"check_position_for_fruit_and",
+			"check_position_for_fruit",
+			"scan_block_area",
+			"check_position_for_fruit",
+			"go_to_this_location",
 			"find_next_ring",
 			"check_position_for_fruit",
 			"isValidMove",
@@ -637,30 +732,7 @@
 			"R",
 			"review",
 			"set_review",
-			"review",
-			"reviews",
-			"reviews_url",
-			"reviews",
-			"review",
-			"reviews",
-			"end",
-			"reviews\n",
-			"\n",
-			"'\n",
-			"reviews",
-			"review",
-			"reviews",
-			"end",
-			"reviews",
-			"review",
-			"reviews",
-			"}\n",
-			"reviews",
-			"getAccessRank",
-			"search",
-			"transparent",
-			"color:",
-			"transparent"
+			"review"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -669,11 +741,11 @@
 		"replace_history":
 		[
 		],
-		"reverse": true,
+		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
-		"wrap": true
+		"wrap": false
 	},
 	"groups":
 	[
@@ -693,8 +765,8 @@
 						"selection":
 						[
 							[
-								9411,
-								9389
+								9881,
+								9881
 							]
 						],
 						"settings":
@@ -793,7 +865,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3234.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -920,15 +992,15 @@
 					"file": "mybot.js",
 					"settings":
 					{
-						"buffer_size": 22134,
+						"buffer_size": 31799,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								94,
-								94
+								622,
+								622
 							]
 						],
 						"settings":
@@ -1027,7 +1099,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 8022.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1044,8 +1116,8 @@
 						"selection":
 						[
 							[
-								4426,
-								4401
+								4007,
+								4007
 							]
 						],
 						"settings":
@@ -1144,7 +1216,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 661.0,
+						"translation.y": 997.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

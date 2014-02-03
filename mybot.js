@@ -1,6 +1,11 @@
 //Test seed: 785282
 //Ring test seed: 558738
-//Currently working on method for 'go_to_this_node_location' global variable;
+//Currently working on method to pick between 2 equidistant positions based on nearby fruit to those positions.
+//Want to get the maximum number of fruit types.  Can win in the different categories.
+//As such, we want to calculate the number of each fruit the player bot and the computer bot has.
+//If a category has only 1 of that fruit on the field, it means an easy win, and we should prioritize that fruit.
+//Fruits with high quantity make it hard to win in that category, so we might want to consider tossing it out, since
+//it would require more turns in order to obtain.
 
 
 //---Global Variables-----------
@@ -68,7 +73,6 @@ function make_move() {
   test_fruit_count = scanDirection(scan_direction);//**DEBUG** Test variable
   test_fruit_count_direction = scan_direction;//**DEBUG** Test variable
 
-  
 
 
 
@@ -151,6 +155,15 @@ function find_move(){
   var my_x = get_my_x();
   var my_y = get_my_y();
 
+
+  //Check adjacent blocks to player to see if there is more than 1 
+  //fruit adjacent within 1 move distance.
+  if (is_there_more_than_1_adjacent_fruit(my_x,my_y)){
+    move_to = determine_direction_when_more_than_one_adjacent_fruit(my_x, my_y);
+    return move_to;
+  }
+
+  
   //Scan for nearest fruit on map
   scan_block_area(0,WIDTH-1,0,HEIGHT-1);//Scans entire map
   //Sorts list for nearest fruit
@@ -333,10 +346,24 @@ function ring_scan(distance_from_center_to_north_position, central_coordinate_x,
   return true;
 }
 
+//Check if location has fruit.  Returns true if has fruit, otherwise returns false.
+function does_position_have_fruit(check_position_x, check_position_y){
+  var board = get_board();
+  if (isValidMove(check_position_x , check_position_y)){
+    if (has_item(board[check_position_x][check_position_y])){
+      return true;
+    }
+    else
+      return false;
+  }
+  else
+    return false;
+}
+
 //Check block for fruit and push to fruit listing if fruit is found on that block
 //which includes the position and distance of player bot to that fruit.
 //Returns 0 if no fruit found or invalid block, returns 1 if fruit found on block.
-function check_position_for_fruit(check_position_x, check_position_y){
+function check_position_for_fruit_and_add_to_list(check_position_x, check_position_y){
   var move_distance = 0;
   var my_x = get_my_x();
   var my_y = get_my_y();
@@ -362,7 +389,7 @@ function check_position_for_fruit(check_position_x, check_position_y){
 //Checks all ring positions for fruit.  Any position with fruit gets added to the 'nearest_fruit_listing' array.
 function check_all_ring_position(ring_distance_input, my_x_input, my_y_input){
   //Needs to contain the current checking position and needs to advance the position around the ring.
-  //At each location that we check for fruit, we invoke the 'check_position_for_fruit' method.
+  //At each location that we check for fruit, we invoke the 'check_position_for_fruit_and_add_to_list' method.
   //When the position returns to the 12 o clock position, we terminate the loop.
 
   var my_x = my_x_input;
@@ -382,7 +409,7 @@ function check_all_ring_position(ring_distance_input, my_x_input, my_y_input){
   //check the 12 o clock position is valid block
   if (isValidMove(check_position_x, check_position_y)){
     //check for fruit and if found push to fruit list
-    check_position_for_fruit(check_position_x, check_position_y);
+    check_position_for_fruit_and_add_to_list(check_position_x, check_position_y);
   }
 
 
@@ -402,7 +429,7 @@ function check_all_ring_position(ring_distance_input, my_x_input, my_y_input){
       looped_ring_once = true;
     //if entire ring not checked yet, check the current position for fruit.
     else
-      check_position_for_fruit(check_position_x, check_position_y);
+      check_position_for_fruit_and_add_to_list(check_position_x, check_position_y);
 
   }
   
@@ -570,7 +597,7 @@ function scanDirection(direction_of_scan){
 
   if (direction_of_scan == WEST){
     for (i = (mybot_position_val_x-1); i >= 0 ; i--){
-      for (j = 0; j < WIDTH ; j++)
+      for (j = 0; j < HEIGHT ; j++)
       {
         if (has_item(board[i][j])){
           fruit_count++;
@@ -613,7 +640,7 @@ function sort_nearest_fruit_listing(){
 //---------------------------------------------------------------------
 
 //Scan map by specifying bounds and dump all fruits found into the nearest_fruit_listing
-//by using the 'check_position_for_fruit() method.  Clears the 'nearest_fruit_listing' array before new scan.
+//by using the 'check_position_for_fruit_and_add_to_list() method.  Clears the 'nearest_fruit_listing' array before new scan.
 function scan_block_area(bound_x_min, bound_x_max, bound_y_min, bound_y_max){
 
   nearest_fruit_listing.length = 0; //**DEBUG***CLEAR FRUIT LISTING
@@ -621,7 +648,7 @@ function scan_block_area(bound_x_min, bound_x_max, bound_y_min, bound_y_max){
     for (var y = bound_y_min ; y <= bound_y_max ; y++){
       if (isValidMove(x , y)){
 
-        check_position_for_fruit(x,y);
+        check_position_for_fruit_and_add_to_list(x,y);
       }
     }
   return true;
@@ -714,6 +741,151 @@ function has_arrive_at_move_to_location(){
 
 }
 
+//Checks if more than 1 adjacent fruit
+function is_there_more_than_1_adjacent_fruit(my_position_x, my_position_y){
+  var my_x = my_position_x;
+  var my_y = my_position_y;
+  var num_adjacent_fruit_to_position = 0;
+
+  //Check North, East, South, West directions
+  //Check North
+  if (does_position_have_fruit(my_x,my_y-1))
+    num_adjacent_fruit_to_position++;
+  //Check East
+  if (does_position_have_fruit(my_x+1,my_y))
+    num_adjacent_fruit_to_position++;
+  //Check South
+  if (does_position_have_fruit(my_x,my_y+1))
+    num_adjacent_fruit_to_position++;
+  //Check West
+  if (does_position_have_fruit(my_x-1,my_y))
+    num_adjacent_fruit_to_position++;
+
+  //Determine number of fruit adjacent is more than 1 adjacent fruit
+  if (num_adjacent_fruit_to_position > 1)
+    return true;
+  else
+    return false;
+}
+
+//Determine which directions have fruit from provided location.  Returns a
+//DirectionsContainer object
+function which_directions_have_fruit_from(my_position_x, my_position_y){
+  var my_x = my_position_x;
+  var my_y = my_position_y;
+
+  if (my_position_x === null || my_position_y === null){
+    error_message_field = "no position inputs provided in 'which_directions_have_fruit_from' method";
+    return false;
+  }
+
+  var item_to_north = false;
+  var item_to_east = false;
+  var item_to_south = false;
+  var item_to_west = false;
+
+
+
+  //Check North, East, South, West directions
+  //Check North
+  if (does_position_have_fruit(my_x,my_y-1))
+    item_to_north = true;
+  //Check East
+  if (does_position_have_fruit(my_x+1,my_y))
+    item_to_east = true;
+  //Check South
+  if (does_position_have_fruit(my_x,my_y+1))
+    item_to_south = true;
+  //Check West
+  if (does_position_have_fruit(my_x-1,my_y))
+    item_to_west = true;
+
+  //Package directions into DirectionsContainer Object
+  var outputDirectionsContainer = new DirectionsContainer(item_to_north, item_to_east, item_to_south, item_to_west);
+
+  return outputDirectionsContainer;
+}
+
+
+//-------DirectionsContainer Object---------------------------
+//DirectionsContainer serves as a wrapper to export multiple direction arguments
+//from a method.
+function DirectionsContainer(has_item_to_north_input, has_item_to_east_input, has_item_to_south_input, has_item_to_west_input){
+
+  this.has_item_to_north = has_item_to_north_input;
+  this.has_item_to_east = has_item_to_east_input;
+  this.has_item_to_south = has_item_to_south_input;
+  this.has_item_to_west = has_item_to_west_input;
+}
+//------------------------------------------------------------
+
+//Decides which direction to move in if more than 1 adjacent North, East, South, or West block has a fruit in it
+function determine_direction_when_more_than_one_adjacent_fruit(my_position_x, my_position_y){
+
+  if (!is_there_more_than_1_adjacent_fruit(my_position_x, my_position_y))
+    return -1;
+
+  //Get directions which have items in them, and extract to separate variables
+  var itemDirections = which_directions_have_fruit_from(my_position_x, my_position_y);
+  var has_item_to_north = itemDirections.has_item_to_north;
+  var has_item_to_east = itemDirections.has_item_to_east;
+  var has_item_to_south = itemDirections.has_item_to_south;
+  var has_item_to_west = itemDirections.has_item_to_west;
+
+  //Store counts of fruits in each scan direction.
+  var fruits_to_north = 0;
+  var fruits_to_east = 0;
+  var fruits_to_south = 0;
+  var fruits_to_west = 0;
+
+  fruits_to_north = scanDirection(NORTH);
+  fruits_to_east = scanDirection(EAST);
+  fruits_to_south = scanDirection(SOUTH);
+  fruits_to_west = scanDirection(WEST);
+
+  //Array to store fruit and direction for sorting.
+  var direction_sorting_array = [];
+
+  if (is_there_more_than_1_adjacent_fruit(my_position_x, my_position_y)){
+    //Scan directions if item is adjacent in that direction
+    if (has_item_to_north){
+      direction_sorting_array.push(new KeyValuePair(NORTH, fruits_to_north));
+    }
+    if (has_item_to_east){
+      direction_sorting_array.push(new KeyValuePair(EAST, fruits_to_east));
+    }
+    if (has_item_to_south){
+      direction_sorting_array.push(new KeyValuePair(SOUTH, fruits_to_south));
+    }
+    if (has_item_to_west){
+      direction_sorting_array.push(new KeyValuePair(WEST, fruits_to_west));
+    }
+  }
+  //Determine which direction has the most fruit (if direction is unavailable, value would've been 0 anyways)
+  //Sort the 'direction_sorting_array' array in descending order to get highest fruit count at index 0.
+  direction_sorting_array.sort(function(a,b){return b.value_amount - a.value_amount;});
+  
+  var direction_picked = direction_sorting_array[0].key;
+  test_text_field = fruits_to_west;
+  //return direction to choose 765111
+  return  direction_picked;
+}
+
+//Object to store key-value pair in an array for sorting
+function KeyValuePair(key_input,value_input){
+  this.key = key_input;
+  this.value_amount = value_input;
+}
+
+
+//Simple mod to nearest fruit algorithm
+//Detect type of fruit.  If increases variety of fruit in bag, pick that one if all cases even.
+//Also check if fruit next to next fruit has a fruit that is not one that was previous to it in the path.
+
+//Determine path to each fruit on map and then a pathway following each one to get 51% control by
+//measuring number of turns to get to a certain block by following the algorithm to take the nearest
+//fruit instead of choosing an alternate.  Find way to mark and ignore fruit that the computer will go after.
+//74350
 
 
 // Optionally include this function if you'd like to always reset to a 
