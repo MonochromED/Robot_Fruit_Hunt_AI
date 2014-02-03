@@ -25,6 +25,13 @@ var go_to_this_node_location = null;
 var test_text_field = "none";//Text field used for testing output.
 var error_message_field = "none";//Displays error message when error caught in algorithms.
 
+//Fruit tracking
+//Player bot fruits type, quantity, and if has over 50% of type.
+//Opponent bot fruits type, quantity, and if has over 50% of type.
+//Fruits remaining on field, by type, quantity, and if has over 50% of type.
+//there will be anywhere between 3-5 item types.
+
+
 //-----------------------------------------------
 
 //----------AreaFruitDensity object-----------------
@@ -866,7 +873,7 @@ function determine_direction_when_more_than_one_adjacent_fruit(my_position_x, my
   direction_sorting_array.sort(function(a,b){return b.value_amount - a.value_amount;});
   
   var direction_picked = direction_sorting_array[0].key;
-  test_text_field = fruits_to_west;
+
   //return direction to choose 765111
   return  direction_picked;
 }
