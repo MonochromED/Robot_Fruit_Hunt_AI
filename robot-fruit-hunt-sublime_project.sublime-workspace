@@ -4,6 +4,50 @@
 		"selected_items":
 		[
 			[
+				"prio",
+				"priority_fruit_type_id"
+			],
+			[
+				"get",
+				"get_my_x"
+			],
+			[
+				"pri",
+				"priority_fruit_y"
+			],
+			[
+				"priorit",
+				"priority_fruit_x_value"
+			],
+			[
+				"win",
+				"win_status_for_item_types"
+			],
+			[
+				"prior",
+				"priorities_listing"
+			],
+			[
+				"remaining",
+				"remaining_item_count_for_item_types"
+			],
+			[
+				"total",
+				"total_item_count_for_item_types"
+			],
+			[
+				"opp",
+				"opponent_item_count_for_item_types"
+			],
+			[
+				"route",
+				"route_bot_to_go_to_location"
+			],
+			[
+				"location",
+				"location_node_of_nearest_priority_fruit"
+			],
+			[
 				"directio",
 				"direction_sorting_array"
 			],
@@ -66,10 +110,6 @@
 			[
 				"num",
 				"num_adjacent_fruit_to_position"
-			],
-			[
-				"get",
-				"get_board"
 			],
 			[
 				"does",
@@ -146,10 +186,6 @@
 			[
 				"eas",
 				"eastern_side_x"
-			],
-			[
-				"location",
-				"location_is_within_bounds"
 			],
 			[
 				"boundar",
@@ -416,18 +452,10 @@
 			}
 		},
 		{
-			"file": "mybot.js",
-			"settings":
-			{
-				"buffer_size": 31799,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "assets/js/player.js",
 			"settings":
 			{
-				"buffer_size": 8658,
+				"buffer_size": 8751,
 				"line_ending": "Unix"
 			}
 		},
@@ -451,7 +479,15 @@
 			"file": "game.html",
 			"settings":
 			{
-				"buffer_size": 2106,
+				"buffer_size": 2247,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "mybot.js",
+			"settings":
+			{
+				"buffer_size": 42936,
 				"line_ending": "Unix"
 			}
 		}
@@ -512,10 +548,12 @@
 	},
 	"file_history":
 	[
+		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/mybot.js",
+		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/test.js",
+		"/H/Programming Code and Notes/RubyOnRails_Projects/FoothillRuby/restaurant/app/assets/javascripts/application.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/grid.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/game.html",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/player.js",
-		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/mybot.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/jquery.min.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt-9b2468765caee696b96b435a04d3b3bb33a37d85/robot-fruit-hunt-9b2468765caee696b96b435a04d3b3bb33a37d85/assets/js/board.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt-9b2468765caee696b96b435a04d3b3bb33a37d85/robot-fruit-hunt-9b2468765caee696b96b435a04d3b3bb33a37d85/mybot.js",
@@ -605,6 +643,16 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"test_fruit_count",
+			"test_fruit",
+			"test_text_field",
+			"test_text",
+			"test_fruit_count",
+			"fruit_count",
+			"test_text_field",
+			"nearest_fruit_listing",
+			"nearest_fruit",
+			"keyValue",
 			"won",
 			"PASS",
 			"pass",
@@ -722,17 +770,7 @@
 			"usersPro",
 			"set_review",
 			"review",
-			"belongs",
-			"review",
-			"new_review_path",
-			"review",
-			"reviews",
-			"newspost",
-			"review",
-			"R",
-			"review",
-			"set_review",
-			"review"
+			"belongs"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -750,7 +788,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -765,8 +803,8 @@
 						"selection":
 						[
 							[
-								9881,
-								9881
+								9652,
+								9652
 							]
 						],
 						"settings":
@@ -865,7 +903,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3430.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -989,135 +1027,18 @@
 				},
 				{
 					"buffer": 2,
-					"file": "mybot.js",
-					"settings":
-					{
-						"buffer_size": 31799,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								622,
-								622
-							]
-						],
-						"settings":
-						{
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": true,
-							"sublimelinter_delay": 2,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "assets/js/player.js",
 					"settings":
 					{
-						"buffer_size": 8658,
+						"buffer_size": 8751,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4007,
-								4007
+								4143,
+								4143
 							]
 						],
 						"settings":
@@ -1216,13 +1137,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 997.0,
+						"translation.y": 1544.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 3,
 					"file": "assets/js/simplebot.js",
 					"settings":
 					{
@@ -1333,13 +1254,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 210.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "assets/js/seedrandom.js",
 					"settings":
 					{
@@ -1456,19 +1377,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "game.html",
 					"settings":
 					{
-						"buffer_size": 2106,
+						"buffer_size": 2247,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2079,
-								2079
+								1870,
+								1870
 							]
 						],
 						"settings":
@@ -1569,6 +1490,123 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "mybot.js",
+					"settings":
+					{
+						"buffer_size": 42936,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								36973,
+								36973
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 14042.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		}
@@ -1640,7 +1678,7 @@
 		[
 			[
 				"",
-				"/H/Programming Code and Notes/RubyOnRails_Projects/test_proj/angularjs_rails/restauranteur/Project_NG-Rails-Integration.sublime-project"
+				"/H/Programming Code and Notes/RubyOnRails_Projects/FoothillRuby/restaurant/Project_RestaurantReview.sublime-project"
 			]
 		],
 		"width": 380.0

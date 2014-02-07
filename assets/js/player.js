@@ -86,8 +86,9 @@ var GamePlay = {
         $('#default_direction').val(default_move_direction);//Test output **DEBUG**
         $('#move_to_value').val(move_to);//Test output **DEBUG**
         $('#is_valid_move').val(is_valid_move);//Test output **DEBUG**
-        $('#test_fruit_count').val(test_fruit_count);//Test output **DEBUG**
-        $('#test_fruit_count_direction').val(test_fruit_count_direction);//Test output **DEBUG**
+        $('#priority_fruit_x_value').val(priority_fruit_x_value);//Test output **DEBUG**
+        $('#priority_fruit_y_value').val(priority_fruit_y_value);//Test output **DEBUG**
+        $('#priority_fruit_type_id').val(priority_fruit_type_id);//Test output **DEBUG**
         $('#test_text_field').val(test_text_field);//Test output **DEBUG**
         $('#error_message_field').val(error_message_field);//Test output **DEBUG**
         var ctx = GamePlay.canvas.getContext('2d');
