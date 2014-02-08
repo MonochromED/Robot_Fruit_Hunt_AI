@@ -116,6 +116,10 @@ function make_move() {
   if (my_x === priority_fruit_x_value && my_y === priority_fruit_y_value && board[get_my_x()][get_my_y()] > 0){
     return TAKE;
   }
+  else if (board[get_my_x()][get_my_y()] > 0 && mybot_routing_algorithm_in_use !== "Priority Fruit") {
+     return TAKE;
+  }
+
   else{
     var move = find_move();
     if (move !== null){
