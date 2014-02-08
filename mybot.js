@@ -42,20 +42,10 @@ var error_message_field = "none";//Displays error message when error caught in a
 //there will be anywhere between 3-5 item types.
 
 
-//-----------------------------------------------
-
-//----------AreaFruitDensity object-----------------
-//AreaFruitDensity objects contain the origin x and y, as well as the block distance in
-//number of moves from that origin.  Thus, if the block is North, East, South, or West by 1
-//block from the origin location, it receives a radius distance of 1.  If it is diagonal
-//then 2 moves are required, and this would be only included if the radius distance was set to 2.
 
 
 //---------------------------------------------------
 
-//--------Determine chain path------------------
-//We then want to determine a particular square's neighbor also has high density.  Thus
-//we want to home in on the higher fruit density areas when this is triggered.
 
 
 //----NodeDistObj Object-----
@@ -103,23 +93,6 @@ function make_move() {
 
 
 
-
-
-
-  //check_all_ring_position(1, my_x, my_y);
-  //test_text_field = nearest_fruit_listing.length;
-  //sort_nearest_fruit_listing();
-
-  /*
-  ring_scan(3, my_x, my_y);//**Test ring scan for detection
-  //Retrieve from list of nearest fruit if list is populated.  This list should be sorted, so element on top is nearest
-  if (nearest_fruit_listing.length !== 0){
-  nearest_fruit_listing_element = nearest_fruit_listing.pop();//check 1st entry is contains node
-  test_text_field = nearest_fruit_listing_element.player_distance_to_this_node;
-  }
-  */
-
-   //---------------END TEST AREA---------------------------------------------------------------------
 /*
 //--------Move to priority, but stop to pick up other fruit if along pathway------
   // we found an item! take it!
@@ -981,7 +954,7 @@ function PrioritiesObject(){
 
   for (i = 0 ; i < this.number_of_item_types ; i++){
     this.total_item_count_for_item_types[i] = get_total_item_count(i+1);
-  }  
+  }
 
   for (i = 0 ; i < this.number_of_item_types ; i++){
     this.player_item_count_for_item_types[i] = 0;
@@ -1008,7 +981,7 @@ function PrioritiesObject(){
     }
 
     for (i = 0 ; i < this.number_of_item_types ; i++){
-      this.remaining_item_count_for_item_types[i] = this.total_item_count_for_item_types[i] - 
+      this.remaining_item_count_for_item_types[i] = this.total_item_count_for_item_types[i] -
         this.player_item_count_for_item_types[i] - this.opponent_item_count_for_item_types[i];
     }
 
@@ -1020,8 +993,8 @@ function PrioritiesObject(){
     for (i = 0 ; i < this.number_of_item_types ; i++){
         if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] > 0.50)
           this.win_status_for_item_types[i] = "win";
-        else if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50 
-          && this.remaining_item_count_for_item_types[i] === 0)
+        else if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50 &&
+          this.remaining_item_count_for_item_types[i] === 0)
           this.win_status_for_item_types[i] = "tie";
         else if (this.opponent_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50)
           this.win_status_for_item_types[i] = "can't win";
@@ -1031,7 +1004,7 @@ function PrioritiesObject(){
 
     }
 
-  }
+  };
   //Checks on the item type to see if that item type is undetermined.  Returns true if undetermined
   //else returns false.
   this.check_if_undetermined_win_status_for_item_type = function(item_type_value){
@@ -1039,7 +1012,7 @@ function PrioritiesObject(){
       return true;
     else
       return false;
-  }
+  };
   
 }
 //-------------------------------------------------------------------------------------------------------------
@@ -1051,7 +1024,7 @@ function scan_and_return_fruit_types(bound_x_min, bound_x_max, bound_y_min, boun
     for (var y = bound_y_min ; y <= bound_y_max ; y++){
       if (isValidMove(x , y)){
         var fruit_type = board[x][y];
-        if (fruit_type != null && fruit_type > 0){
+        if (fruit_type !== null && fruit_type > 0){
           return fruit_type;
         }
       }
@@ -1067,7 +1040,7 @@ function findPriorityFruitType(){
   if (priorities_listing === null){
     priorities_listing = new PrioritiesObject();
   }
-  else 
+  else
     (priorities_listing.update_item_counts());
 
   //determine fruit type that currently requires the least fruit to win.  Check starting amounts
@@ -1090,7 +1063,7 @@ function findPriorityFruitType(){
   }
 
   //sort the list of winnable fruit item group types
-  list_of_winnable_fruit_item_group_type.sort(function(a,b){return a.value_amount-b.value_amount});
+  list_of_winnable_fruit_item_group_type.sort(function(a,b){return a.value_amount-b.value_amount;});
 
   //determine the fruit with least on the field for quick category win by selecting the index 0 type.
   current_fruit_with_least_needed_to_win_by_total = list_of_winnable_fruit_item_group_type[0].key;
@@ -1128,14 +1101,7 @@ function findNearestPriorityFruitLocation(){
 }
 
 
-//Simple mod to nearest fruit algorithm
-//Detect type of fruit.  If increases variety of fruit in bag, pick that one if all cases even.
-//Also check if fruit next to next fruit has a fruit that is not one that was previous to it in the path.
 
-//Determine path to each fruit on map and then a pathway following each one to get 51% control by
-//measuring number of turns to get to a certain block by following the algorithm to take the nearest
-//fruit instead of choosing an alternate.  Find way to mark and ignore fruit that the computer will go after.
-//74350
 
 
 // Optionally include this function if you'd like to always reset to a 
