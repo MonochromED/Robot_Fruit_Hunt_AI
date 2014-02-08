@@ -85,6 +85,7 @@ var GamePlay = {
         $('#test_spot_has_item').val(test_spot_has_item);//Test output **DEBUG**
         $('#default_direction').val(default_move_direction);//Test output **DEBUG**
         $('#move_to_value').val(move_to);//Test output **DEBUG**
+        $('#mybot_routing_algorithm_in_use').val(mybot_routing_algorithm_in_use);//Test output **DEBUG**
         $('#is_valid_move').val(is_valid_move);//Test output **DEBUG**
         $('#priority_fruit_x_value').val(priority_fruit_x_value);//Test output **DEBUG**
         $('#priority_fruit_y_value').val(priority_fruit_y_value);//Test output **DEBUG**

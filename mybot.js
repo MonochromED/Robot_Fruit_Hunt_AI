@@ -20,7 +20,6 @@
 var mybot_position_val_x = 1;//Test variable **DEBUG**
 var mybot_position_val_y = 1;//Test variable **DEBUG**
 var test_spot_has_item = 0;//Test variable **DEBUG**
-var fruit_density_array = new Array();//Area fruit density listing.  Contains AreaFruitDensity objects.
 var nodes_checked = new Array();//Contains an array of nodes that have been checked.
 var nodes_to_check = new Array();//Contains an array of nodes that have to be checked still.
 var default_move_direction = NORTH;
@@ -34,6 +33,7 @@ var go_to_this_node_location = null;
 var priorities_listing = null; //Contains a PrioritiesObject
 var test_text_field = "none";//Text field used for testing output.
 var error_message_field = "none";//Displays error message when error caught in algorithms.
+var mybot_routing_algorithm_in_use = "none";//Displays the current routing algorithm being used by my bot;
 
 //Fruit tracking
 //Player bot fruits type, quantity, and if has over 50% of type.
@@ -62,7 +62,6 @@ function new_game() {
 mybot_position_val_x = 1;//Test variable **DEBUG**
 mybot_position_val_y = 1;//Test variable **DEBUG**
 test_spot_has_item = 0;//Test variable **DEBUG**
-fruit_density_array = new Array();//Area fruit density listing.  Contains AreaFruitDensity objects.
 nodes_checked = new Array();//Contains an array of nodes that have been checked.
 nodes_to_check = new Array();//Contains an array of nodes that have to be checked still.
 default_move_direction = NORTH;
@@ -118,6 +117,7 @@ function make_move() {
   }
   else{
     var move = find_move();
+    //test_text_field = priorities_listing.check_win_status_for_item_type_if_a_bot_gained_this_amount(2, 2, 2);
     if (move !== null){
       return move;
     }
@@ -128,17 +128,7 @@ function make_move() {
   //-------------------------------------------------  
 
 
-   //return SimpleBot.findMove(new node(get_opponent_x(), get_opponent_y(), -1));
-   
-   // Movement algorithm
-   //We first analyze the current board condition, which was passed into the 'board' variable
-   //at the beginning of this method.  
-   //var rand = Math.random() * 4;
 
-   //if (rand < 1) return NORTH;
-   //if (rand < 2) return SOUTH;
-   //if (rand < 3) return EAST;
-   //if (rand < 4) return WEST;  
 }
 
 /*
@@ -180,30 +170,72 @@ function find_move(){
 
 
 
-
+  //-----Home in on Priority Fruit Algorithm------
   //---------------Scan for nearest fruit-----------------------------------------  
   //Scan for nearest fruit on map
   scan_block_area(0,WIDTH-1,0,HEIGHT-1);//Scans entire map and updates the array for 'nearest_fruit_listing'.
   //Sorts list for nearest fruit
   sort_nearest_fruit_listing();
-  //find fruit type priority, then find nearest of that type and home in on it. (Due to the TAKE command in make_move, if
-  // if we pass over a fruit on the way, it will pause there to take it.  May need to fix this **DEBUG**TEST**)
+  //find fruit type priority, then find nearest of that type and home in on it. 
   var priority_fruit_type = findPriorityFruitType();
   var location_node_of_nearest_priority_fruit = findNearestPriorityFruitLocation();
- 
-  //moves bot towards nearest fruit location.
-  var priority_fruit_x = location_node_of_nearest_priority_fruit.x;
-  var priority_fruit_y = location_node_of_nearest_priority_fruit.y; 
-  //***UPDATES the priority fruit location and id values
-  priority_fruit_x_value = priority_fruit_x;
-  priority_fruit_y_value = priority_fruit_y;
-  priority_fruit_type_id = priority_fruit_type;
+  
+  //Check if location_node_of_nearest_priority_fruit === null
+  //moves bot towards nearest fruit location with priority.
+  var priority_fruit_x = null;
+  var priority_fruit_y = null;
+  
+  if (location_node_of_nearest_priority_fruit !== null){
+    priority_fruit_x = location_node_of_nearest_priority_fruit.x;
+    priority_fruit_y = location_node_of_nearest_priority_fruit.y;
+
+    //Checks if opponent already on this spot and player bot is not.  If so, ignore, since if player is not already there
+    //can't get a share of the fruit.  Determine if category still undetermined.  Recaculate route.
+      //checking if opponent on this spot.
+      var opponent_is_on_target_already = checkIfOpponentOnLocation(priority_fruit_x, priority_fruit_y);
+      //checking if player is on this spot.
+      var my_bot_is_on_target_already = checkIfPlayerOnLocation(priority_fruit_x, priority_fruit_y);
+      var opponent_will_capture_before_player = false;
+      if (opponent_is_on_target_already && !my_bot_is_on_target_already){
+        opponent_will_capture_before_player = true;
+      }
+
+      //Case when opponent will capture the fruit before the player bot does
+      //---
+      //***CONINTUE FROM HERE****
+      //count opponent as having taken that fruit by preemtively updating the status chart.
+      var status_on_item_type_if_opponent_takes = priorities_listing.check_win_status_for_item_type_if_a_bot_gained_this_amount(priority_fruit_type, 1, 1);
+      //if category still undetermined
+      if (status_on_item_type_if_opponent_takes === "undetermined"){
+        //Check next nearest location of current priority fruit.
+        findNearestPriorityFruitLocation(2);
+      }
+      //If anything else, give up on that fruit type, and set the 'priority_fruit_type' to the next one.  Do this by modifying the fruit status to the
+      //return value;
+      priorities_listing.win_status_for_item_types[priority_fruit_type] = status_on_item_type_if_opponent_takes;
+      //reinvoke findPriorityFruitType();
+      priority_fruit_type = findPriorityFruitType();
+      //find the new location node and assign.
+      location_node_of_nearest_priority_fruit = findNearestPriorityFruitLocation();
+      // get and assign values to priority_fruit x and y.
+      if (location_node_of_nearest_priority_fruit !== null){
+        priority_fruit_x = location_node_of_nearest_priority_fruit.x;
+        priority_fruit_y = location_node_of_nearest_priority_fruit.y;
+      }
+
+
+    //***UPDATES the priority fruit location and id values
+    priority_fruit_x_value = priority_fruit_x;
+    priority_fruit_y_value = priority_fruit_y;
+    priority_fruit_type_id = priority_fruit_type;
+  }
 
   if (location_node_of_nearest_priority_fruit !== null){
     move_to = route_bot_to_go_to_location(priority_fruit_x, priority_fruit_y);
+    mybot_routing_algorithm_in_use = "Priority Fruit";
     return move_to;
   }
-
+  //-------------End Home in on Priority Fruit Algorithm----
 
 
 
@@ -224,7 +256,10 @@ function find_move(){
   //moves bot in direction towards specified location
   move_to = route_bot_to_go_to_location(go_to_x,go_to_y);
 
-
+  if (move_to !== -1){
+    mybot_routing_algorithm_in_use = "nearest fruit";
+    return move_to;
+  }
 
 
   //In case no blocks have fruit, increase search distance by 1 each cycle
@@ -244,6 +279,7 @@ function find_move(){
   //Default moves if no decision made
   //If move in that direction cannot be moved to, changes the default
   //move direction.
+  mybot_routing_algorithm_in_use = "random move (something is wrong)";
   if (move_to === -1){
     if (default_move_direction == NORTH)
       if (isValidMove(my_x,my_y-1)){
@@ -284,7 +320,6 @@ function find_move(){
 
   else
     return move_to;
-
 }
 
 function getNewDefaultDirection(){
@@ -677,7 +712,7 @@ function calculateDistanceAtoB(positionA_x , positionA_y , positionB_x , positio
 function sort_nearest_fruit_listing(){
 
   //Sorts in ascending order all fruits listed in the 'nearest_fruit_listing'.
-  nearest_fruit_listing.sort(function(a,b){return a.player_distance_to_this_node - b.player_distance_to_this_node});
+  nearest_fruit_listing.sort(function(a,b){return a.player_distance_to_this_node - b.player_distance_to_this_node;});
 
   return true;
 
@@ -700,7 +735,7 @@ function scan_block_area(bound_x_min, bound_x_max, bound_y_min, bound_y_max){
   return true;
 }
 
-//**************WORKING ON THIS PART*************************
+
 //Route bot to nearest fruit stored in go_to_location
 function route_bot_to_go_to_location(position_x, position_y){
   var use_x_axis_path = false;
@@ -988,23 +1023,37 @@ function PrioritiesObject(){
     //Determine if player has more than 50% of that fruit type.  Logs win if so.  If equal 50% for player and none remaining, tie, 
     //if opponent has 50% and fruit type is still remaining, counted as a fruit type that cannot be won.  Can tweak to pick this category
     //up if we are scretching the need to win or tie up a segment.
-    //else if opponent has more than 50% of that fruit type, log a loss.  If none of those conditions, leaves status
+    //else if opponent has more than 50% of that fruit type, log a loss.  If none of those conditions, marks status
     //as default, which is 'undetermined'
     for (i = 0 ; i < this.number_of_item_types ; i++){
-        if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] > 0.50)
-          this.win_status_for_item_types[i] = "win";
-        else if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50 &&
-          this.remaining_item_count_for_item_types[i] === 0)
-          this.win_status_for_item_types[i] = "tie";
-        else if (this.opponent_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50)
-          this.win_status_for_item_types[i] = "can't win";
-        else if (this.opponent_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] > 0.50)
-          this.win_status_for_item_types[i] = "lose";
-
-
+      this.determine_win_status_for_item_type(i+1);
     }
 
   };
+
+  //Checks for item_type win_status category and updates priorities_list win statuses
+  this.determine_win_status_for_item_type = function(item_type_id_value){
+    if (!checkIfItemIdValid(item_type_id_value)){
+      error_message_field = "argument for 'determine_win_status_for_item_type' invalid value.";
+      return false;
+    }
+    //If valid input, convert for index of item types
+    var i = item_type_id_value - 1;
+
+    if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] > 0.50)
+      this.win_status_for_item_types[i] = "win";
+    else if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50 &&
+      this.remaining_item_count_for_item_types[i] === 0)
+      this.win_status_for_item_types[i] = "tie";
+    else if (this.opponent_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50)
+      this.win_status_for_item_types[i] = "can't win";
+    else if (this.opponent_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] > 0.50)
+      this.win_status_for_item_types[i] = "lose";
+    else
+      this.win_status_for_item_types[i] = "undetermined";
+    return true;
+  };
+
   //Checks on the item type to see if that item type is undetermined.  Returns true if undetermined
   //else returns false.
   this.check_if_undetermined_win_status_for_item_type = function(item_type_value){
@@ -1012,6 +1061,80 @@ function PrioritiesObject(){
       return true;
     else
       return false;
+  };
+
+
+  //Check and return type of win status.  Does not update priorities_list win statuses
+  this.check_and_return_item_type_win_status = function(item_type_id_value){
+    if (!checkIfItemIdValid(item_type_id_value)){
+      error_message_field = "argument for 'determine_win_status_for_item_type' invalid value.";
+      return "error with input";
+    }
+    //If valid input, convert for index of item types
+    var i = item_type_id_value - 1;
+
+    if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] > 0.50)
+      return "win";
+    else if (this.player_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50 &&
+      this.remaining_item_count_for_item_types[i] === 0)
+      return "tie";
+    else if (this.opponent_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] === 0.50)
+      return "can't win";
+    else if (this.opponent_item_count_for_item_types[i]/this.total_item_count_for_item_types[i] > 0.50)
+      return "lose";
+    else
+      return "undetermined";
+
+  };
+
+  //Check for item_type win status category if opponent gained more for that fruit category by
+  //the argument amount.  Specify player bot with 0, or opponent bot by 1.
+  this.check_win_status_for_item_type_if_a_bot_gained_this_amount = function(fruit_type_id, fruit_quantity, receiving_bot){
+    
+    //Validate fruit type id
+    var fruit_type_selected_valid = checkIfItemIdValid(fruit_type_id);
+    if (!fruit_type_selected_valid){
+      error_message_field = "input for fruit_type_id invalid in method 'check_win_status_for_item_type_if_a_bot_gained_this_amount'";
+      return "invalid 'fruit_type_id' input";
+    }
+    //Create variables to contain add amounts.
+    var my_fruit_count_add_amount = 0;
+    var opponent_fruit_count_add_amount = 0;
+    
+    //apply changes to selected bot
+    //Applies to player bot
+    if (receiving_bot === 0){
+      my_fruit_count_add_amount = fruit_quantity;
+    }
+    //Applies to opponent bot
+    else if (receiving_bot === 1){
+      opponent_fruit_count_add_amount = fruit_quantity;
+    }
+    //Attempting apply to invalid bot.
+    else{
+      error_message_field = "'check_win_status_for_item_type_if_a_bot_gained_this_amount' applied to invalid bot value";
+    }
+
+    //calculate if there is a win status and determine which outcome.
+    //If valid input, convert for index of item types
+    //Augments from fruits added are calculated in.
+    var i = fruit_type_id - 1;
+
+    if ((this.player_item_count_for_item_types[i] + my_fruit_count_add_amount)/
+      (this.total_item_count_for_item_types[i] + opponent_fruit_count_add_amount) > 0.50)
+      return "win";
+    else if ((this.player_item_count_for_item_types[i] + my_fruit_count_add_amount)/
+      (this.total_item_count_for_item_types[i] + opponent_fruit_count_add_amount) === 0.50 &&
+      this.remaining_item_count_for_item_types[i] === 0)
+      return "tie";
+    else if ((this.opponent_item_count_for_item_types[i] + my_fruit_count_add_amount)/
+      (this.total_item_count_for_item_types[i] + opponent_fruit_count_add_amount) === 0.50)
+      return "can't win";
+    else if ((this.opponent_item_count_for_item_types[i] + my_fruit_count_add_amount)/
+      (this.total_item_count_for_item_types[i] + opponent_fruit_count_add_amount) > 0.50)
+      return "lose";
+    else
+      return "undetermined";
   };
   
 }
@@ -1074,11 +1197,23 @@ function findPriorityFruitType(){
 
 //Find nearest fruit matching the priority fruit type.  Check the list of 'nearest_fruit_listing'
 //and proceed along the array until we find a listed location containing the fruit priority type.
-//Returns a node object for the nearest location match.
-function findNearestPriorityFruitLocation(){
-  //checks against nearest_fruit_listing and iterates through it until it finds a fruit that matches the priority fruit id.
-  //Since list is already sorted by distance, this would be the nearest fruit of the desired type.
+//Returns a node object for the nearest location match.  Set 'priority_fruit_proximity_list_index_value' 
+//argument to 1 for 1st in list of closest for the type,
+//2 for the second, etc.  Can also leave blank for default value.  Within the game framework, this value
+//really should be 1 unless the opponent is about to capture a fruit, in which case this value might be 2.  
+//If nearest priority fruit location does not exist, then this method returns null as no matches were found.
+//checks against nearest_fruit_listing and iterates through it until it finds a fruit that matches the priority fruit id.
+//Since list is already sorted by distance, this would be the nearest fruit of the desired type.
+//If we have an argument, checks for that value of closeness.  1 is closest, and increases with each next location farther.
+//If we set the argument to 2, and both items continue to persist on the board, the bot will bounce back and forth due to
+//the distance changing at every turn.  Either the movement algorithm has to store that fruit location and update it
+//when a state change occurs to it, or only use it in the case of knowing the opponent will take the nearest fruit to the
+//player bot.
+function findNearestPriorityFruitLocation(priority_fruit_proximity_list_index_value_input){
 
+  var priority_fruit_type_match_cycle = 1;//Contains the check cycle for the priority fruit type.  Starts at 1.  Increments each time fruit type found.
+  if(typeof(priority_fruit_proximity_list_index_value_input) === 'undefined') priority_fruit_proximity_list_index_value_input = 1;
+  var priority_fruit_proximity_list_index_value = priority_fruit_proximity_list_index_value_input;
   var board = get_board();
   var nearest_fruit_listing_size = nearest_fruit_listing.length;
   var fruit_priority_id_value = findPriorityFruitType();
@@ -1092,15 +1227,56 @@ function findNearestPriorityFruitLocation(){
     //If match found, returns the reference to the matching node containing the nearest priority fruit.
     if (board[search_x][search_y] === fruit_priority_id_value){
       var nearest_priority_fruit_location_node = nearest_fruit_listing[i];
-      
-      return nearest_priority_fruit_location_node;
+
+      //Check if this priority fruit type is the desired proximity.  If the argument requires the next closest (
+      //priority_fruit_proximity_list_index_value_input = 2,
+      //we would skip the return on the furst pass, cycle and look for the next one.
+      if (priority_fruit_type_match_cycle === priority_fruit_proximity_list_index_value){
+        return nearest_priority_fruit_location_node;
+      }
+      else{
+        priority_fruit_type_match_cycle++;
+      }
     }
   }
 
   return null;
 }
 
+//Check if player is already on a location specified.
+function checkIfPlayerOnLocation(input_x, input_y){
+  var my_x = get_my_x();
+  var my_y = get_my_y();
 
+  if (my_x === input_x && my_y === input_y)
+    return true;
+  else
+    return false;
+}
+
+//Check if opponent already on a location specified.
+function checkIfOpponentOnLocation(input_x, input_y){
+  var opponent_x = get_opponent_x();
+  var opponent_y = get_opponent_y();
+  
+  if (opponent_x === input_x && opponent_y == input_y)
+    return true;
+  else
+    return false;
+
+}
+
+//Checks if item id is valid
+function checkIfItemIdValid(item_id_input){
+  var number_of_item_types = get_number_of_item_types();
+  if (item_id_input > 0 && item_id_input <= number_of_item_types){
+    return true;
+  }
+  else{
+    error_message_field = "invalid item id input";
+    return false;
+  }
+}
 
 
 
