@@ -6,8 +6,7 @@
 //With homing in on priority type, check if one type is particularly close and rate the capture in number of moves as well.  If too far
 //and plenty of nearby low number captures, do those first.
 
-//Cancel a move to if opponent is already hovering over current target and player bot is not hovering over current target.  Skip to next target of that type, or 
-//if cannot win that type, mark it in priorities_listing as can't win.  The current algorithm then skips to the next fruit type.
+
 
 //Check if can win a group in less moves than priority fruit from the group that currently contains the lowest number of fruit to win it.
 
@@ -75,6 +74,7 @@ go_to_this_node_location = null;
 priorities_listing = null; //Contains a PrioritiesObject
 test_text_field = "none";//Text field used for testing output.
 error_message_field = "none";//Displays error message when error caught in algorithms.
+mybot_routing_algorithm_in_use = "none";//Displays the current routing algorithm being used by my bot;
 }
 
 
@@ -110,6 +110,7 @@ function make_move() {
 //----------------------------------------------------------------------------
 */
 
+
   //-------------Priority target only mode--------------
   //If we are on the priority location and there is fruit, take, otherwise move
   if (my_x === priority_fruit_x_value && my_y === priority_fruit_y_value && board[get_my_x()][get_my_y()] > 0){
@@ -117,7 +118,6 @@ function make_move() {
   }
   else{
     var move = find_move();
-    //test_text_field = priorities_listing.check_win_status_for_item_type_if_a_bot_gained_this_amount(2, 2, 2);
     if (move !== null){
       return move;
     }
@@ -163,85 +163,29 @@ function consider_move_column_scan(position) {
 
 //Check the surrounding blocks to bot.  Begin at 1 move distance.
 function find_move(){
-  var my_x = get_my_x();
-  var my_y = get_my_y();
 
 
 
+  move_to = usePriorityFruitAlgorithm();
 
-
-  //-----Home in on Priority Fruit Algorithm------
-  //---------------Scan for nearest fruit-----------------------------------------  
-  //Scan for nearest fruit on map
-  scan_block_area(0,WIDTH-1,0,HEIGHT-1);//Scans entire map and updates the array for 'nearest_fruit_listing'.
-  //Sorts list for nearest fruit
-  sort_nearest_fruit_listing();
-  //find fruit type priority, then find nearest of that type and home in on it. 
-  var priority_fruit_type = findPriorityFruitType();
-  var location_node_of_nearest_priority_fruit = findNearestPriorityFruitLocation();
-  
-  //Check if location_node_of_nearest_priority_fruit === null
-  //moves bot towards nearest fruit location with priority.
-  var priority_fruit_x = null;
-  var priority_fruit_y = null;
-  
-  if (location_node_of_nearest_priority_fruit !== null){
-    priority_fruit_x = location_node_of_nearest_priority_fruit.x;
-    priority_fruit_y = location_node_of_nearest_priority_fruit.y;
-
-    //Checks if opponent already on this spot and player bot is not.  If so, ignore, since if player is not already there
-    //can't get a share of the fruit.  Determine if category still undetermined.  Recaculate route.
-      //checking if opponent on this spot.
-      var opponent_is_on_target_already = checkIfOpponentOnLocation(priority_fruit_x, priority_fruit_y);
-      //checking if player is on this spot.
-      var my_bot_is_on_target_already = checkIfPlayerOnLocation(priority_fruit_x, priority_fruit_y);
-      var opponent_will_capture_before_player = false;
-      if (opponent_is_on_target_already && !my_bot_is_on_target_already){
-        opponent_will_capture_before_player = true;
-      }
-
-      //Case when opponent will capture the fruit before the player bot does
-      //---
-      //***CONINTUE FROM HERE****
-      //count opponent as having taken that fruit by preemtively updating the status chart.
-      var status_on_item_type_if_opponent_takes = priorities_listing.check_win_status_for_item_type_if_a_bot_gained_this_amount(priority_fruit_type, 1, 1);
-      //if category still undetermined
-      if (status_on_item_type_if_opponent_takes === "undetermined"){
-        //Check next nearest location of current priority fruit.
-        findNearestPriorityFruitLocation(2);
-      }
-      //If anything else, give up on that fruit type, and set the 'priority_fruit_type' to the next one.  Do this by modifying the fruit status to the
-      //return value;
-      priorities_listing.win_status_for_item_types[priority_fruit_type] = status_on_item_type_if_opponent_takes;
-      //reinvoke findPriorityFruitType();
-      priority_fruit_type = findPriorityFruitType();
-      //find the new location node and assign.
-      location_node_of_nearest_priority_fruit = findNearestPriorityFruitLocation();
-      // get and assign values to priority_fruit x and y.
-      if (location_node_of_nearest_priority_fruit !== null){
-        priority_fruit_x = location_node_of_nearest_priority_fruit.x;
-        priority_fruit_y = location_node_of_nearest_priority_fruit.y;
-      }
-
-
-    //***UPDATES the priority fruit location and id values
-    priority_fruit_x_value = priority_fruit_x;
-    priority_fruit_y_value = priority_fruit_y;
-    priority_fruit_type_id = priority_fruit_type;
-  }
-
-  if (location_node_of_nearest_priority_fruit !== null){
-    move_to = route_bot_to_go_to_location(priority_fruit_x, priority_fruit_y);
-    mybot_routing_algorithm_in_use = "Priority Fruit";
+  if(move_to !== null){
     return move_to;
   }
-  //-------------End Home in on Priority Fruit Algorithm----
+
 
 
 
   //Else if we did not find a priority fruit because value was null go to nearest fruit instead.
   //Gets the x and y coordinate of this fruit
-
+  //Scan for nearest fruit on map
+  move_to = useNearestFruitAlgorithm();
+  if(move_to !== null){
+    return move_to;
+  }
+  /*
+  scan_block_area(0,WIDTH-1,0,HEIGHT-1);//Scans entire map and updates the array for 'nearest_fruit_listing'.
+  //Sorts list for nearest fruit
+  sort_nearest_fruit_listing();
 
   //Check adjacent blocks to player to see if there is more than 1 
   //fruit adjacent within 1 move distance.
@@ -260,27 +204,23 @@ function find_move(){
     mybot_routing_algorithm_in_use = "nearest fruit";
     return move_to;
   }
-
-
-  //In case no blocks have fruit, increase search distance by 1 each cycle
-  //while (move_to < 0)
-  {
-    //Place radial scan algorithm here.  Phase 1 will just home in on nearest. Phase 2 will add in density valuation.
-  }
+*/
 
 
 
 
-  //If time about to run out.
-  //Move bot in case no moves decided.  
-  //Check for block valid, else move to next choice.
+
+
+
   
   //----------DEFAULT MOVE DIRECTION PICKER--------------------------
   //Default moves if no decision made
   //If move in that direction cannot be moved to, changes the default
   //move direction.
+  var my_x = get_my_x();
+  var my_y = get_my_y();
   mybot_routing_algorithm_in_use = "random move (something is wrong)";
-  if (move_to === -1){
+  if (move_to === null){
     if (default_move_direction == NORTH)
       if (isValidMove(my_x,my_y-1)){
         return NORTH;
@@ -321,6 +261,112 @@ function find_move(){
   else
     return move_to;
 }
+
+//Finds nearest fruit and targets that
+function useNearestFruitAlgorithm(){
+  var my_x = get_my_x();
+  var my_y = get_my_y();
+  scan_block_area(0,WIDTH-1,0,HEIGHT-1);//Scans entire map and updates the array for 'nearest_fruit_listing'.
+  //Sorts list for nearest fruit
+  sort_nearest_fruit_listing();
+  var nearest_fruit_direction = null;
+
+  //Check adjacent blocks to player to see if there is more than 1 
+  //fruit adjacent within 1 move distance.
+  if (is_there_more_than_1_adjacent_fruit(my_x,my_y)){
+    nearest_fruit_direction = determine_direction_when_more_than_one_adjacent_fruit(my_x, my_y);
+    mybot_routing_algorithm_in_use = "nearest fruit";
+    return nearest_fruit_direction;
+  }
+  //If none adjacent, resorts to the 'nearest_fruit_listing'.
+  var go_to_x = nearest_fruit_listing[0].x;
+  var go_to_y = nearest_fruit_listing[0].y;
+
+  //moves bot in direction towards specified location
+  nearest_fruit_direction = route_bot_to_go_to_location(go_to_x,go_to_y);
+
+  if (nearest_fruit_direction !== -1){
+    mybot_routing_algorithm_in_use = "nearest fruit";
+    return nearest_fruit_direction;
+  }
+  if (nearest_fruit_direction === -1)
+    return null;
+}
+
+//Finds fruit based on if category is winnable and easier to win by number of fruit required to win.
+//Map number example that causes this algoritm to return null board num: 920600
+//If this function can't find a priority fruit, make sure to have a fallback algorithm on hand to handle.
+function usePriorityFruitAlgorithm(){
+//-----Home in on Priority Fruit Algorithm------
+  //---------------Scan for nearest fruit-----------------------------------------  
+  //Scan for nearest fruit on map
+  scan_block_area(0,WIDTH-1,0,HEIGHT-1);//Scans entire map and updates the array for 'nearest_fruit_listing'.
+  //Sorts list for nearest fruit
+  sort_nearest_fruit_listing();
+  //find fruit type priority, then find nearest of that type and home in on it. 
+  var priority_fruit_type = findPriorityFruitType();
+  var location_node_of_nearest_priority_fruit = findNearestPriorityFruitLocation();
+  
+  //In the event we cannot find the nearest fruit type, pass our turn.
+  if (priority_fruit_type === null){
+    return null;
+  }
+
+  //Check if location_node_of_nearest_priority_fruit === null
+  //moves bot towards nearest fruit location with priority.
+  var priority_fruit_x = null;
+  var priority_fruit_y = null;
+  
+  if (location_node_of_nearest_priority_fruit !== null){
+    priority_fruit_x = location_node_of_nearest_priority_fruit.x;
+    priority_fruit_y = location_node_of_nearest_priority_fruit.y;
+
+    //Checks if opponent already on this spot and player bot is not.  If so, ignore, since if player is not already there
+    //can't get a share of the fruit.  Determine if category still undetermined.  Recaculate route.
+      //checking if opponent on this spot.
+      var opponent_is_on_target_already = checkIfOpponentOnLocation(priority_fruit_x, priority_fruit_y);
+      //checking if player is on this spot.
+      var my_bot_is_on_target_already = checkIfPlayerOnLocation(priority_fruit_x, priority_fruit_y);
+      var opponent_will_capture_before_player = false;
+      if (opponent_is_on_target_already && !my_bot_is_on_target_already){
+        opponent_will_capture_before_player = true;
+      }
+
+      //Case when opponent will capture the fruit before the player bot does
+      //count opponent as having taken that fruit by preemtively updating the status chart.
+      var status_on_item_type_if_opponent_takes = priorities_listing.check_win_status_for_item_type_if_a_bot_gained_this_amount(priority_fruit_type, 1, 1);
+      //if category still undetermined
+      if (status_on_item_type_if_opponent_takes === "undetermined"){
+        //Check next nearest location of current priority fruit.
+        findNearestPriorityFruitLocation(2);
+      }
+      //If not undetermined, give up on that fruit type, and set the 'priority_fruit_type' to the next one.  
+      //Do this by modifying the fruit status to the return value;
+      priorities_listing.win_status_for_item_types[priority_fruit_type] = status_on_item_type_if_opponent_takes;
+      //reinvoke findPriorityFruitType();
+      priority_fruit_type = findPriorityFruitType();
+      //find the new location node and assign.
+      location_node_of_nearest_priority_fruit = findNearestPriorityFruitLocation();
+      // get and assign values to priority_fruit x and y.
+      if (location_node_of_nearest_priority_fruit !== null){
+        priority_fruit_x = location_node_of_nearest_priority_fruit.x;
+        priority_fruit_y = location_node_of_nearest_priority_fruit.y;
+      }
+
+
+    //***UPDATES the priority fruit location and id values
+    priority_fruit_x_value = priority_fruit_x;
+    priority_fruit_y_value = priority_fruit_y;
+    priority_fruit_type_id = priority_fruit_type;
+  }
+
+  if (location_node_of_nearest_priority_fruit !== null){
+    move_to = route_bot_to_go_to_location(priority_fruit_x, priority_fruit_y);
+    mybot_routing_algorithm_in_use = "Priority Fruit";
+    return move_to;
+  }
+}
+
 
 function getNewDefaultDirection(){
 
@@ -1184,13 +1230,19 @@ function findPriorityFruitType(){
       list_of_winnable_fruit_item_group_type.push(new KeyValuePair(current_fruit_item_id_number, current_fruit_item_quantity));
     }
   }
-
+  //In event that all categories of fruit has status determined by mybot priority fruit algorithm is 0, we return a null
+  //to have the bot home in on the nearest fruit instead.
+  if (list_of_winnable_fruit_item_group_type.length === 0){
+    current_fruit_with_least_needed_to_win_by_total = null;
+  }
+  //If list_of_winnable_fruit_item_group_type has anything in it, sort.
   //sort the list of winnable fruit item group types
-  list_of_winnable_fruit_item_group_type.sort(function(a,b){return a.value_amount-b.value_amount;});
-
-  //determine the fruit with least on the field for quick category win by selecting the index 0 type.
-  current_fruit_with_least_needed_to_win_by_total = list_of_winnable_fruit_item_group_type[0].key;
-
+  if (list_of_winnable_fruit_item_group_type.length > 0){
+    list_of_winnable_fruit_item_group_type.sort(function(a,b){return a.value_amount-b.value_amount;});
+  
+    //determine the fruit with least on the field for quick category win by selecting the index 0 type.
+    current_fruit_with_least_needed_to_win_by_total = list_of_winnable_fruit_item_group_type[0].key;
+  }
 
   return current_fruit_with_least_needed_to_win_by_total;
 }

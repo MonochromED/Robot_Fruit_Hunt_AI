@@ -1,3 +1,10 @@
+//**TEST**AUTOPLAY tag on lines with changes made to have player auto play through levels and auto start on load.
+//Keeping track of win/tie/loss cases with globals.
+var my_wins = 0;
+var my_ties = 0;
+var my_losses = 0;
+var my_win_rate = 0;
+//------------------------
 
 var GamePlay = {
     init: function() {
@@ -73,11 +80,15 @@ var GamePlay = {
         $('#buttons').css('padding-left', GamePlay.itemTypeCount * 50);
         $('#buttons').css('padding-top', HEIGHT * 50);
         Grid.draw();
+        my_win_rate = my_wins/(my_wins + my_ties + my_losses);//**TEST output **DEBUG** **TEST**AUTOPLAY
+        $('#my_win_rate').val(my_win_rate);//Test output **DEBUG**        
         GamePlay.start();
     },
     start: function() {
-        GamePlay.mode = "pause";
+        GamePlay.mode = "play";//**TEST**AUTOPLAY
+        //GamePlay.mode = "pause";//**TEST**AUTOPLAY
         GamePlay.draw();
+
     },
     draw: function() {
         $('#mybot_position_val_x').val(mybot_position_val_x);//Test output **DEBUG**
@@ -92,6 +103,11 @@ var GamePlay = {
         $('#priority_fruit_type_id').val(priority_fruit_type_id);//Test output **DEBUG**
         $('#test_text_field').val(test_text_field);//Test output **DEBUG**
         $('#error_message_field').val(error_message_field);//Test output **DEBUG**
+        //--**Holds value till JS reload.  global for this not cleared
+        $('#my_wins').val(my_wins);//Test output **DEBUG** **TEST**AUTOPLAY
+        $('#my_ties').val(my_ties);//Test output **DEBUG**  **TEST**AUTOPLAY
+        $('#my_losses').val(my_losses);//Test output **DEBUG** **TEST**AUTOPLAY
+        //-------------------------------------------------------------
         var ctx = GamePlay.canvas.getContext('2d');
         ctx.clearRect(0,0,GamePlay.canvas.width,GamePlay.canvas.height);
         GamePlay.drawItems(ctx, Board.board, Board.history);
@@ -105,26 +121,33 @@ var GamePlay = {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
                    ctx.fillText("You win!", 0, 275);
+                   GamePlay.setupNewGame();//**TEST**AUTOPLAY
+                   my_wins++;//**TEST**AUTOPLAY
                }
                if (score < 0) {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
                    ctx.fillText("You lose!", 0, 275);
+                   GamePlay.setupNewGame();//**TEST**AUTOPLAY
+                   my_losses++;//**TEST**AUTOPLAY
                }
                if (score == 0) {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
                    ctx.fillText("You tie!", 0, 275);
+                   GamePlay.setupNewGame();//**TEST**AUTOPLAY
+                   my_ties++;//**TEST**AUTOPLAY
                }
-               GamePlay.mode = "pause";
+               //GamePlay.mode = "pause";//**TEST**AUTOPLAY
                return;
            }
            Board.processMove();//Triggers moves for player and computer bots to occur.
            //Recursive call to GamePlay.draw() causes looping of turns to occur. Pause between turns of .5 seconds.
 
-           setTimeout(function() {GamePlay.draw();}, 500);
+           setTimeout(function() {GamePlay.draw();}, 50);//**TEST**AUTOPLAY faster speed. stock was 500 ms
         } else {
-           GamePlay.mode = "pause";
+           GamePlay.mode = "pause";//**TEST**AUTOPLAY if encounters pause, sets up new game
+           //GamePlay.setupNewGame();//**TEST**AUTOPLAY
         }
     },
     displayScore: function(ctx, state) {

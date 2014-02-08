@@ -4,20 +4,60 @@
 		"selected_items":
 		[
 			[
-				"prio",
-				"priority_fruit_type_id"
+				"priorit",
+				"priority_fruit_type"
+			],
+			[
+				"priority",
+				"priority_fruit_type"
+			],
+			[
+				"winstat",
+				"win_status_for_item_types"
+			],
+			[
+				"mybot",
+				"mybot_routing_algorithm_in_use"
+			],
+			[
+				"status",
+				"status_on_item_type_if_opponent_takes"
+			],
+			[
+				"opp",
+				"opponent_fruit_count"
+			],
+			[
+				"oppo",
+				"opponent_fruit_count"
+			],
+			[
+				"fruit",
+				"fruit_type_selected_valid"
+			],
+			[
+				"fruit_type",
+				"fruit_type_id"
+			],
+			[
+				"get_opp",
+				"get_opponent_item_count"
+			],
+			[
+				"checkIf",
+				"checkIfPlayerOnLocation"
 			],
 			[
 				"get",
-				"get_my_x"
+				"get_my_y"
 			],
 			[
 				"pri",
-				"priority_fruit_y"
+				"priority_fruit_y_value"
 			],
 			[
-				"priorit",
-				"priority_fruit_x_value"
+				"prio",
+				"priority_fruit_type_id"
 			],
 			[
 				"win",
@@ -34,10 +74,6 @@
 			[
 				"total",
 				"total_item_count_for_item_types"
-			],
-			[
-				"opp",
-				"opponent_item_count_for_item_types"
 			],
 			[
 				"route",
@@ -308,10 +344,6 @@
 				"row_position"
 			],
 			[
-				"mybot",
-				"mybot_position_val_x"
-			],
-			[
 				"number",
 				"number_of_fruits_in_direction"
 			],
@@ -455,7 +487,7 @@
 			"file": "assets/js/player.js",
 			"settings":
 			{
-				"buffer_size": 8751,
+				"buffer_size": 8856,
 				"line_ending": "Unix"
 			}
 		},
@@ -479,7 +511,7 @@
 			"file": "game.html",
 			"settings":
 			{
-				"buffer_size": 2247,
+				"buffer_size": 2344,
 				"line_ending": "Unix"
 			}
 		},
@@ -487,7 +519,7 @@
 			"file": "mybot.js",
 			"settings":
 			{
-				"buffer_size": 42936,
+				"buffer_size": 49567,
 				"line_ending": "Unix"
 			}
 		}
@@ -643,6 +675,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"win",
+			"itemtypecount",
+			"priorities_list",
+			"test_spot_has_item",
+			"test_spot",
+			"else",
+			"priority_fruit_type_id",
+			"checkIfOpp",
 			"test_fruit_count",
 			"test_fruit",
 			"test_text_field",
@@ -762,15 +802,7 @@
 			"bottom",
 			"display",
 			"navigation",
-			"create",
-			"comment",
-			"review",
-			"format",
-			"rss",
-			"usersPro",
-			"set_review",
-			"review",
-			"belongs"
+			"create"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -788,7 +820,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -803,8 +835,8 @@
 						"selection":
 						[
 							[
-								9652,
-								9652
+								770,
+								770
 							]
 						],
 						"settings":
@@ -903,7 +935,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3430.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1030,15 +1062,15 @@
 					"file": "assets/js/player.js",
 					"settings":
 					{
-						"buffer_size": 8751,
+						"buffer_size": 8856,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4143,
-								4143
+								5288,
+								5291
 							]
 						],
 						"settings":
@@ -1137,7 +1169,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1544.0,
+						"translation.y": 924.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1381,15 +1413,15 @@
 					"file": "game.html",
 					"settings":
 					{
-						"buffer_size": 2247,
+						"buffer_size": 2344,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1870,
-								1870
+								500,
+								500
 							]
 						],
 						"settings":
@@ -1496,15 +1528,15 @@
 					"file": "mybot.js",
 					"settings":
 					{
-						"buffer_size": 42936,
+						"buffer_size": 49567,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								36973,
-								36973
+								4842,
+								4842
 							]
 						],
 						"settings":
@@ -1603,7 +1635,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 14042.0,
+						"translation.y": 1250.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
