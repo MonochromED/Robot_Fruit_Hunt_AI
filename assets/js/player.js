@@ -85,8 +85,8 @@ var GamePlay = {
         GamePlay.start();
     },
     start: function() {
-        GamePlay.mode = "play";//**TEST**AUTOPLAY
-        //GamePlay.mode = "pause";//**TEST**AUTOPLAY
+        //GamePlay.mode = "play";//**TEST**AUTOPLAY
+        GamePlay.mode = "pause";//**TEST**AUTOPLAY
         GamePlay.draw();
 
     },
@@ -121,30 +121,30 @@ var GamePlay = {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
                    ctx.fillText("You win!", 0, 275);
-                   GamePlay.setupNewGame();//**TEST**AUTOPLAY
+                   //GamePlay.setupNewGame();//**TEST**AUTOPLAY
                    my_wins++;//**TEST**AUTOPLAY
                }
                if (score < 0) {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
                    ctx.fillText("You lose!", 0, 275);
-                   GamePlay.setupNewGame();//**TEST**AUTOPLAY
+                   //GamePlay.setupNewGame();//**TEST**AUTOPLAY
                    my_losses++;//**TEST**AUTOPLAY
                }
                if (score == 0) {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
                    ctx.fillText("You tie!", 0, 275);
-                   GamePlay.setupNewGame();//**TEST**AUTOPLAY
+                   //GamePlay.setupNewGame();//**TEST**AUTOPLAY
                    my_ties++;//**TEST**AUTOPLAY
                }
-               //GamePlay.mode = "pause";//**TEST**AUTOPLAY
+               GamePlay.mode = "pause";//**TEST**AUTOPLAY
                return;
            }
            Board.processMove();//Triggers moves for player and computer bots to occur.
            //Recursive call to GamePlay.draw() causes looping of turns to occur. Pause between turns of .5 seconds.
 
-           setTimeout(function() {GamePlay.draw();}, 50);//**TEST**AUTOPLAY faster speed. stock was 500 ms
+           setTimeout(function() {GamePlay.draw();}, 500);//**TEST**AUTOPLAY faster speed. stock was 500 ms
         } else {
            GamePlay.mode = "pause";//**TEST**AUTOPLAY if encounters pause, sets up new game
            //GamePlay.setupNewGame();//**TEST**AUTOPLAY

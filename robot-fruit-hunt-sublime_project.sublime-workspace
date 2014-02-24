@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"nearest_fruit",
+				"nearest_fruit_direction"
+			],
+			[
+				"priority_fruit",
+				"priority_fruit_type"
+			],
+			[
+				"current_fruit",
+				"current_fruit_with_least_needed_to_win_by_total"
+			],
+			[
+				"list",
+				"list_of_winnable_fruit_item_group_type"
+			],
+			[
 				"priorit",
 				"priority_fruit_type"
 			],
@@ -487,7 +503,7 @@
 			"file": "assets/js/player.js",
 			"settings":
 			{
-				"buffer_size": 8856,
+				"buffer_size": 10267,
 				"line_ending": "Unix"
 			}
 		},
@@ -511,7 +527,7 @@
 			"file": "game.html",
 			"settings":
 			{
-				"buffer_size": 2344,
+				"buffer_size": 2591,
 				"line_ending": "Unix"
 			}
 		},
@@ -519,7 +535,7 @@
 			"file": "mybot.js",
 			"settings":
 			{
-				"buffer_size": 49567,
+				"buffer_size": 51471,
 				"line_ending": "Unix"
 			}
 		}
@@ -580,6 +596,7 @@
 	},
 	"file_history":
 	[
+		"/C/Users/kami_sama/.gitconfig",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/mybot.js",
 		"/H/Programming Code and Notes/JavaScript Projects/Scribd Robot Fruit Hunt/robot-fruit-hunt/assets/js/test.js",
 		"/H/Programming Code and Notes/RubyOnRails_Projects/FoothillRuby/restaurant/app/assets/javascripts/application.js",
@@ -675,6 +692,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"test_text_field",
+			"findPriorityFruitType",
+			"test_text",
+			"test_text_field",
+			"\"play\"",
+			"mode = \"play\"",
+			"play",
 			"win",
 			"itemtypecount",
 			"priorities_list",
@@ -795,14 +819,7 @@
 			"div",
 			"overflow",
 			"float",
-			"footer",
-			"dash",
-			"dashboard",
-			"relative",
-			"bottom",
-			"display",
-			"navigation",
-			"create"
+			"footer"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -820,7 +837,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -835,8 +852,8 @@
 						"selection":
 						[
 							[
-								770,
-								770
+								7050,
+								7050
 							]
 						],
 						"settings":
@@ -1062,15 +1079,15 @@
 					"file": "assets/js/player.js",
 					"settings":
 					{
-						"buffer_size": 8856,
+						"buffer_size": 10267,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5288,
-								5291
+								4199,
+								4275
 							]
 						],
 						"settings":
@@ -1169,7 +1186,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 924.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1186,8 +1203,8 @@
 						"selection":
 						[
 							[
-								1361,
-								1361
+								261,
+								263
 							]
 						],
 						"settings":
@@ -1303,8 +1320,8 @@
 						"selection":
 						[
 							[
-								10096,
-								10096
+								10092,
+								10092
 							]
 						],
 						"settings":
@@ -1403,7 +1420,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3696.0,
+						"translation.y": 990.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1413,15 +1430,15 @@
 					"file": "game.html",
 					"settings":
 					{
-						"buffer_size": 2344,
+						"buffer_size": 2591,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								500,
-								500
+								432,
+								385
 							]
 						],
 						"settings":
@@ -1528,15 +1545,15 @@
 					"file": "mybot.js",
 					"settings":
 					{
-						"buffer_size": 49567,
+						"buffer_size": 51471,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4842,
-								4842
+								14524,
+								14524
 							]
 						],
 						"settings":
@@ -1635,7 +1652,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1250.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1710,7 +1727,7 @@
 		[
 			[
 				"",
-				"/H/Programming Code and Notes/RubyOnRails_Projects/FoothillRuby/restaurant/Project_RestaurantReview.sublime-project"
+				"/H/Programming Code and Notes/HTML Projects/CanvasPractice/Canvas_Practice_Project.sublime-project"
 			]
 		],
 		"width": 380.0

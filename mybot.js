@@ -6,7 +6,7 @@
 //With homing in on priority type, check if one type is particularly close and rate the capture in number of moves as well.  If too far
 //and plenty of nearby low number captures, do those first.
 
-
+//Check for fewest moves winnable category.  Target that down first. based on current position.
 
 //Check if can win a group in less moves than priority fruit from the group that currently contains the lowest number of fruit to win it.
 
